@@ -2,18 +2,19 @@
     presenter for converter view
 '''
 
-from .converter_view import ConverterView
-from .converter_model import ConverterModel
+from typing import TYPE_CHECKING
+from .expression_enum import QuantumExpression, expressions
 
+if TYPE_CHECKING:
+    from .converter_model import ConverterModel
+    from .converter_view import ConverterView
 
 class ConverterPresenter():
     '''
         presenter for converter
     '''
 
-    model: ConverterModel
-    view: ConverterView
-
-    def __init__(self, view: ConverterView, model: ConverterModel) -> None:
+    def __init__(self, view: 'ConverterView', model: 'ConverterModel') -> None:
         self.view = view
+        self.view.set_presenter(self)
         self.model = model

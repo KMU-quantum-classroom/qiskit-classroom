@@ -2,12 +2,17 @@
     conveter view class
 '''
 
-from PyQt6 import QtCore
-from PyQt6.QtWidgets import QWidget, QLabel, QComboBox, QVBoxLayout, QHBoxLayout, QFrame
-# from .expression_enum import QuantumExpression
-# from .converter_presenter import ConverterPresenter
+from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtWidgets import QWidget, QLabel, QComboBox, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QFileDialog, QErrorMessage
+from qiskit_classroom.expression_enum import expressions
+from typing import TYPE_CHECKING
 
-class ConverterView(QWidget):
+if TYPE_CHECKING:
+    from .converter_presenter import ConverterPresenter
+
+
+
+class DropArea(QLabel):
     '''
         converter view class
     '''
