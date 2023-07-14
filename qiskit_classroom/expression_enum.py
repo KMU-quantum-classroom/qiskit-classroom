@@ -14,3 +14,6 @@ class QuantumExpression(enum.Enum):
     DIRAC = 2,
     MATRIX = 3,
     NONE = -1
+
+
+expressions = [expression.name for expression in QuantumExpression]

@@ -26,8 +26,8 @@ class ConverterModel():
     __result_img_path: str
 
     def __init__(self) -> None:
-        self.__from_expression = QuantumExpression.NONE
-        self.__to_expression = QuantumExpression.NONE
+        self.__from_expression = None
+        self.__to_expression = None
         self.__expression_value_name = None
         self.__sourcecode_path = None
         self.__result_img_path = None

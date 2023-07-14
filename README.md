@@ -1,4 +1,5 @@
-# qiskit-classroom-template
-Qiskit classroom Templates. 
+# qiskit-classroom
 
-Contains the default settings required by Qiskit ecosystem.
+Qiskit classroom
+
+* convert expression to another expression and visualize
