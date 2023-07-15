@@ -45,6 +45,7 @@ class ConverterModel():
             raise ConvertingRuleException()
 
         self.__from_expression = value
+        print(f"from expression changed to {value}")
 
     @property
     def to_expression(self) -> QuantumExpression:
@@ -60,6 +61,7 @@ class ConverterModel():
             raise ConvertingRuleException()
 
         self.__to_expression = value
+        print(f"to exression changed to {value}")
 
     @property
     def expression_value_name(self) -> str:
@@ -72,6 +74,8 @@ class ConverterModel():
     def expression_value_name(self, value: str) -> None:
         self.__expression_value_name = value
 
+        print(f"expression value name change to {value}")
+
     @property
     def sourcecode_path(self) -> str:
         '''
@@ -83,6 +87,8 @@ class ConverterModel():
     def soucecode_path(self, value: str) -> None:
         self.__sourcecode_path = value
 
+        print(f"sourcecod path change to {value}")
+
     @property
     def result_img_path(self) -> str:
         '''
@@ -93,6 +99,7 @@ class ConverterModel():
     @result_img_path.setter
     def result_img_path(self, value: str) -> str:
         self.__result_img_path = value
+        print(f"result img path change to {value}")
 
     async def convert_and_draw(self) -> None:
         '''
