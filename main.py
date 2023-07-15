@@ -1,18 +1,41 @@
 import sys
-
-from PyQt6.QtWidgets import QApplication
+import asyncio
+import functools
+import qasync
+from qasync import QApplication
 from qiskit_classroom.converter_view import ConverterView
 from qiskit_classroom.converter_model import ConverterModel
 from qiskit_classroom.converter_presenter import ConverterPresenter
 
-if __name__ == '__main__':
 
-    app = QApplication(sys.argv)
+async def main():
+    '''
+        main for app
+    '''
+    def close_future(future: asyncio.Future, loop):
+        loop.call_later(10, future.cancel)
+        future.cancel()
+
+    loop = asyncio.get_event_loop()
+    future = asyncio.Future()
+
+    app = QApplication.instance()
+    if hasattr(app, "aboutToQuit"):
+        getattr(app, "aboutToQuit").connect(functools.partial(close_future, future, loop))
+
     model = ConverterModel()
-    w = ConverterView()
+    view = ConverterView()
 
-    presenter = ConverterPresenter(w, model)
-    w.set_presenter(presenter=presenter)
+    presenter = ConverterPresenter(view, model)
+    view.set_presenter(presenter=presenter)
 
-    w.show()
-    sys.exit(app.exec())
+    view.show()
+
+    await future
+    return True
+
+if __name__ == "__main__":
+    try:
+        qasync.run(main())
+    except asyncio.exceptions.CancelledError:
+        sys.exit(0)

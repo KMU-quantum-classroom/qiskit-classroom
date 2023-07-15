@@ -2,14 +2,17 @@
     conveter view class
 '''
 
-from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtWidgets import QWidget, QLabel, QComboBox, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QFileDialog, QErrorMessage
-from qiskit_classroom.expression_enum import expressions
+
 from typing import TYPE_CHECKING
+from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtWidgets import (QWidget, QLabel, QComboBox, QVBoxLayout, QHBoxLayout, QLineEdit,
+                             QPushButton, QFileDialog, QMessageBox)
+from qasync import asyncSlot
+from qiskit_classroom.expression_enum import expressions
+
 
 if TYPE_CHECKING:
     from .converter_presenter import ConverterPresenter
-
 
 
 class DropArea(QLabel):

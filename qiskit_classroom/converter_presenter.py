@@ -2,12 +2,15 @@
     presenter for converter view
 '''
 
+
+import asyncio
 from typing import TYPE_CHECKING
 from .expression_enum import QuantumExpression, expressions
 
 if TYPE_CHECKING:
     from .converter_model import ConverterModel
     from .converter_view import ConverterView
+
 
 class ConverterPresenter():
     '''
