@@ -26,12 +26,18 @@ class DropArea(QLabel):
         self.drop_handler = None
 
     def set_ui(self) -> None:
+        '''
+            set UI
+        '''
         self.setFixedHeight(250)
         self.setStyleSheet("border-style: dashed; border-width: 2px; color: blue; border-color: red;")
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setText("drop .py file here")
 
     def set_drop_handler(self) -> None:
+        '''
+            pass file path to presenter
+        '''
         pass
 
 
@@ -85,6 +91,7 @@ class ConverterView(QWidget):
         converting_form_box.addWidget(self.to_combo)
 
         self.convert_button = QPushButton("Convert")
+        self.convert_button.clicked.connect(self.on_convert_push_button_clicked)
 
         vbox.addLayout(load_box)
         vbox.addLayout(value_name_box)
@@ -102,14 +109,33 @@ class ConverterView(QWidget):
         self.move(frame.topLeft())
 
     def set_presenter(self, presenter: 'ConverterPresenter') -> None:
+        '''
+            set presenter
+        '''
         self.presenter = presenter
 
     def set_droparea_imported(self) -> None:
+        '''
+            change droparea text to "imported"
+        '''
         self.droparea.setText("imported")
     
-    def set_to_dropdowm_items(self, items: list[str]) -> None:
+    def set_to_combo_items(self, items: list[str]) -> None:
+        '''
+            set to_combo items
+        '''
         self.to_combo.clear()
         self.to_combo.addItems(items)
 
     def show_alert_message(self, message: str) -> None:
-        QErrorMessage.showMessage(message=message)
+        '''
+            show alert message to user
+        '''
+        QMessageBox.information(self, message, message)
+
+    @asyncSlot()
+    async def on_convert_push_button_clicked(self) -> None:
+        '''
+            proxy for ConvertPresenter.on_convert_button_clicked()
+        '''
+        await self.presenter.on_convert_button_clicked()
