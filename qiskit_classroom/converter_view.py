@@ -58,6 +58,7 @@ class DropArea(QLabel):
         self.setText("drop .py file here")
 
     def dragEnterEvent(self, event: QDragEnterEvent) -> None:
+        # pylint: disable=invalid-name
         """
         handle drag event and accept only url
         """
@@ -68,6 +69,7 @@ class DropArea(QLabel):
             event.ignore()
 
     def dropEvent(self, event: QDropEvent) -> None:
+        # pylint: disable=invalid-name
         """
         handle drop event and emit file imported event
         """
@@ -181,6 +183,7 @@ class ConverterView(QWidget):
         """
         QMessageBox.information(self, message, message)
 
+    # todo migration from asynio and qasync to QProcess
     @asyncSlot()
     async def on_convert_push_button_clicked(self) -> None:
         """

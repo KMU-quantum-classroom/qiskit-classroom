@@ -65,6 +65,7 @@ class ConverterPresenter:
                 self.view.set_droparea_imported(file)
                 break
 
+    # todo migration from asynio and qasync to QProcess
     async def on_convert_button_clicked(self) -> None:
         """
         convert expression and visualiazation

@@ -2,7 +2,7 @@
     worker for convert and visualize expressions
 """
 
-# todo migration to QProcess
+# todo migration from asynio and qasync to QProcess
 import asyncio
 import random
 from shutil import copyfile
