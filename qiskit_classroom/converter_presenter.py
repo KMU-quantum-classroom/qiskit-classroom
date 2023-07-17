@@ -30,7 +30,7 @@ class ConverterPresenter:
         """
         update sourcecode_path
         """
-        self.model.soucecode_path = filepath
+        self.model.sourcecode_path = filepath
         self.view.set_droparea_imported(self.model.sourcecode_path)
 
     def on_from_combo_changed(self) -> None:
@@ -60,7 +60,10 @@ class ConverterPresenter:
         update sourcecode_path
         """
         for file in files.files:
-            print(file)
+            if file.endswith(".py"):
+                self.model.sourcecode_path = file
+                self.view.set_droparea_imported(file)
+                break
 
     async def on_convert_button_clicked(self) -> None:
         """

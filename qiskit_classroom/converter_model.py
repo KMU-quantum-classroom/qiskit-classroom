@@ -94,7 +94,7 @@ class ConverterModel:
         return self.__sourcecode_path
 
     @sourcecode_path.setter
-    def soucecode_path(self, value: str) -> None:
+    def sourcecode_path(self, value: str) -> None:
         self.__sourcecode_path = value
 
         print(f"sourcecod path change to {value}")

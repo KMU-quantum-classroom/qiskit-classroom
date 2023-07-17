@@ -4,8 +4,7 @@
 
 
 from typing import TYPE_CHECKING
-from PyQt6 import QtGui
-from PyQt6.QtGui import QDragEnterEvent, QDropEvent, QDragMoveEvent
+from PyQt6.QtGui import QDragEnterEvent, QDropEvent
 from PyQt6.QtCore import QSize, Qt, pyqtSignal
 from PyQt6.QtWidgets import (
     QWidget,
@@ -27,6 +26,9 @@ if TYPE_CHECKING:
 
 
 class FileList:
+    """
+    file name list for drop event
+    """
     def __init__(self, files: list[str]) -> None:
         self.files = files
 
@@ -59,12 +61,9 @@ class DropArea(QLabel):
         """
         handle drag event and accept only url
         """
-        self.setText("drop here")
-        event.acceptProposedAction()
-
-    def dragMoveEvent(self, event: QDragMoveEvent) -> None:
         if event.mimeData().hasUrls():
             event.accept()
+            self.setText("drop here")
         else:
             event.ignore()
 
@@ -74,7 +73,7 @@ class DropArea(QLabel):
         """
         if event.mimeData().hasUrls():
             files = [u.toLocalFile() for u in event.mimeData().urls()]
-            self.file_imported(FileList(files=files))
+            self.file_imported.emit(FileList(files=files))
             event.accept()
 
 
