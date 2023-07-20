@@ -4,9 +4,9 @@
 
 
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QDragEnterEvent, QDropEvent
-from PyQt6.QtCore import QSize, Qt, pyqtSignal
-from PyQt6.QtWidgets import (
+from PySide6.QtGui import QDragEnterEvent, QDropEvent
+from PySide6.QtCore import QSize, Qt, Signal
+from PySide6.QtWidgets import (
     QWidget,
     QLabel,
     QComboBox,
@@ -38,7 +38,7 @@ class DropArea(QLabel):
     file drop area widget
     """
 
-    file_imported = pyqtSignal(FileList)
+    file_imported = Signal(FileList)
 
     def __init__(self, parent) -> None:
         super().__init__(parent=parent)
@@ -107,7 +107,9 @@ class ConverterView(QWidget):
         vbox.addWidget(self.droparea)
 
         load_box = QHBoxLayout()
+        load_box.addStretch()
         self.load_push_button = QPushButton("or load...")
+        self.load_push_button.setMinimumWidth(150)
         self.load_push_button.clicked.connect(self.on_file_load_clicked)
         load_box.addWidget(self.load_push_button)
 

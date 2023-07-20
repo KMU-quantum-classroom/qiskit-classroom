@@ -1,11 +1,14 @@
 import sys
 import asyncio
 import functools
-import qasync
-from qasync import QApplication
 from qiskit_classroom.converter_view import ConverterView
 from qiskit_classroom.converter_model import ConverterModel
 from qiskit_classroom.converter_presenter import ConverterPresenter
+
+# rearranged it to tell qasync to use PySide6
+# pylint: disable=wrong-import-order
+import qasync
+from qasync import QApplication
 
 
 async def main():
