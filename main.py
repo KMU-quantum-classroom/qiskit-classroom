@@ -1,3 +1,6 @@
+"""
+entry point for gui application
+"""
 import sys
 import asyncio
 import functools
@@ -12,9 +15,10 @@ from qasync import QApplication
 
 
 async def main():
-    '''
-        main for app
-    '''
+    """
+    main for app
+    """
+
     def close_future(future: asyncio.Future, loop):
         loop.call_later(10, future.cancel)
         future.cancel()
@@ -24,7 +28,9 @@ async def main():
 
     app = QApplication.instance()
     if hasattr(app, "aboutToQuit"):
-        getattr(app, "aboutToQuit").connect(functools.partial(close_future, future, loop))
+        getattr(app, "aboutToQuit").connect(
+            functools.partial(close_future, future, loop)
+        )
 
     model = ConverterModel()
     view = ConverterView()
@@ -37,8 +43,21 @@ async def main():
     await future
     return True
 
+
 if __name__ == "__main__":
-    try:
-        qasync.run(main())
-    except asyncio.exceptions.CancelledError:
-        sys.exit(0)
+    if sys.version_info.major == 3 and sys.version_info.minor == 11:
+        # this code run on 3.11
+        # pylint: disable=protected-access
+        with qasync._set_event_loop_policy(qasync.DefaultQEventLoopPolicy()):
+            runner = asyncio.runners.Runner()
+            try:
+                runner.run(main())
+            except asyncio.exceptions.CancelledError:
+                sys.exit(0)
+            finally:
+                runner.close()
+    else:
+        try:
+            qasync.run(main())
+        except asyncio.exceptions.CancelledError:
+            sys.exit(0)
