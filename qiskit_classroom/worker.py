@@ -2,7 +2,6 @@
     worker for convert and visualize expressions
 """
 
-# todo migration from asynio and qasync to QProcess
 import asyncio
 import random
 from shutil import copyfile
@@ -11,7 +10,7 @@ from .expression_enum import QuantumExpression
 
 
 class ConverterWorker:
-    """ """
+    """worker for convert expression and visualize expression"""
 
     from_expression: QuantumExpression
     to_expression: QuantumExpression
@@ -40,8 +39,22 @@ class ConverterWorker:
             injected_file.write(
                 "from qiskit_class_converter import ConversionService, ConversionType"
             )
+            injected_file.write(self.__convert_code())
+            injected_file.write(self.__drawing_code())
+
+    def __convert_code(self) -> str:
+        pass
+
+    def __drawing_code(self) -> str:
+        pass
 
     async def run(self) -> str:
+        """inject expression convert code to user's source code and create
+        subprocess for drawing converted expresion
+
+        Returns:
+            str: path of subprocess created image
+        """
         self.__code_inject()
         proc = await asyncio.create_subprocess_exec(
             f"python3 {self.sourcecode_path}.py",

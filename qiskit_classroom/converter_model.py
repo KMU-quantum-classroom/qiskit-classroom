@@ -111,7 +111,6 @@ class ConverterModel:
         self.__result_img_path = value
         print(f"result img path change to {value}")
 
-    # todo migration from asynio and qasync to QProcess
     async def convert_and_draw(self) -> None:
         """
         convert expression and draw by subprocess

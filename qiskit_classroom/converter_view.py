@@ -29,6 +29,7 @@ class FileList:
     """
     file name list for drop event
     """
+
     def __init__(self, files: list[str]) -> None:
         self.files = files
 
@@ -161,31 +162,39 @@ class ConverterView(QWidget):
         self.presenter.on_filepath_inputed(filename)
 
     def set_presenter(self, presenter: "ConverterPresenter") -> None:
-        """
-        set presenter
+        """set presenter
+
+        Args:
+            presenter (ConverterPresenter): presenter for ConverterView
         """
         self.presenter = presenter
 
     def set_droparea_imported(self, filepath: str) -> None:
+        """change droparea text to "imported"
+
+        Args:
+            filepath (str): imported file path
         """
-        change droparea text to "imported"
-        """
+
         self.droparea.setText("imported: \n\n" + filepath)
 
     def set_to_combo_items(self, items: list[str]) -> None:
-        """
-        set to_combo items
+        """set to_combo items
+
+        Args:
+            items (list[str]): string items
         """
         self.to_combo.clear()
         self.to_combo.addItems(items)
 
     def show_alert_message(self, message: str) -> None:
-        """
-        show alert message to user
+        """show alert message to user
+
+        Args:
+            message (str): message
         """
         QMessageBox.information(self, message, message)
 
-    # todo migration from asynio and qasync to QProcess
     @asyncSlot()
     async def on_convert_push_button_clicked(self) -> None:
         """

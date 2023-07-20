@@ -27,8 +27,10 @@ class ConverterPresenter:
         self.view.droparea.file_imported.connect(self.on_file_path_droped)
 
     def on_filepath_inputed(self, filepath: str) -> None:
-        """
-        update sourcecode_path
+        """update sourcecode_path
+
+        Args:
+            filepath (str): filepath from view
         """
         self.model.sourcecode_path = filepath
         self.view.set_droparea_imported(self.model.sourcecode_path)
@@ -56,8 +58,10 @@ class ConverterPresenter:
         self.model.expression_value_name = self.view.value_name_text.text()
 
     def on_file_path_droped(self, files: "FileList") -> None:
-        """
-        update sourcecode_path
+        """Choose the first one among multiple file addresses that end with .py
+
+        Args:
+            files (FileList): multiple file address
         """
         for file in files.files:
             if file.endswith(".py"):
@@ -65,14 +69,13 @@ class ConverterPresenter:
                 self.view.set_droparea_imported(file)
                 break
 
-    # todo migration from asynio and qasync to QProcess
     async def on_convert_button_clicked(self) -> None:
         """
-        convert expression and visualiazation
+        convert expression and visualiazation.
         update result file path
         """
         print("hello")
         await asyncio.sleep(0.5)
         self.view.show_alert_message("dd")
         print("world")
-        await self.model.convert_and_draw()
+        self.model.result_img_path = await self.model.convert_and_draw()
