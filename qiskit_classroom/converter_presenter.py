@@ -75,13 +75,12 @@ class ConverterPresenter:
                 self.view.set_droparea_imported(file)
                 break
 
+    # todo: error handling, data validation
     async def on_convert_button_clicked(self) -> None:
         """
         convert expression and visualiazation.
         update result file path
         """
-        print("hello")
-        await asyncio.sleep(0.5)
-        self.view.show_alert_message("dd")
-        print("world")
+        self.view.show_progress_bar()
         self.model.result_img_path = await self.model.convert_and_draw()
+        self.view.close_progress_bar()

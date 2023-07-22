@@ -4,6 +4,7 @@
 
 
 from .expression_enum import QuantumExpression
+from .worker import ConverterWorker
 
 
 class ConvertingRuleException(Exception):
@@ -111,8 +112,17 @@ class ConverterModel:
         self.__result_img_path = value
         print(f"result img path change to {value}")
 
+    # todo: add abort feature
     async def convert_and_draw(self) -> None:
         """
         convert expression and draw by subprocess
         """
-        raise NotImplementedError()
+
+        worker = ConverterWorker(
+            self.from_expression,
+            self.to_experssion,
+            self.sourcecode_path,
+            self.expression_value_name,
+        )
+        await worker.run()
+        return
