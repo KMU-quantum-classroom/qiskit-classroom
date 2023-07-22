@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
     QPushButton,
     QFileDialog,
     QMessageBox,
+    QProgressDialog,
 )
 from qasync import asyncSlot
 from qiskit_classroom.expression_enum import expressions
@@ -134,6 +135,7 @@ class ConverterView(QWidget):
         converting_form_box.addWidget(to_label)
         converting_form_box.addWidget(self.to_combo)
 
+        # todo add ask dialog
         self.convert_button = QPushButton("Convert")
         self.convert_button.clicked.connect(self.on_convert_push_button_clicked)
 
@@ -141,6 +143,11 @@ class ConverterView(QWidget):
         vbox.addLayout(value_name_box)
         vbox.addLayout(converting_form_box)
         vbox.addWidget(self.convert_button)
+
+        # todo add abort feature
+        self.progress_bar = QProgressDialog(
+            "wait for progressing", "abort", 0, 0, parent=self
+        )
 
     def center(self) -> None:
         """
@@ -201,3 +208,15 @@ class ConverterView(QWidget):
         proxy for ConvertPresenter.on_convert_button_clicked()
         """
         await self.presenter.on_convert_button_clicked()
+
+    def show_progress_bar(self) -> None:
+        """
+        show progress bar to user. show progress to user!
+        """
+        self.progress_bar.show()
+
+    def close_progress_bar(self) -> None:
+        """
+        close progress bar dialog
+        """
+        self.progress_bar.close()
