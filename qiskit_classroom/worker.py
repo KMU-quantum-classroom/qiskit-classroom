@@ -74,16 +74,19 @@ class ConverterWorker:
         """
         self.__code_inject()
         proc = await asyncio.create_subprocess_exec(
-            f"python3 {self.sourcecode_path}.py",
+            sys.executable,
+            self.__injected_sourcecode_path,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
         )
         stdout, stderr = await proc.communicate()
 
         await proc.wait()
+        output: str = ""
 
         if stdout:
-            print(f"output {stdout.decode()}")
+            output = stdout.decode()
+            print(f"output {output}")
         if stderr:
             print(f"err {stderr.decode()}")
 
