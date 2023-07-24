@@ -151,8 +151,8 @@ class ConverterWorker:
         latex = result.group().replace("\n", " ")
 
         fig = plt.figure()
-        fig.text(0.1, 0.5, f"${latex}$")
+        fig.text(0, 0, f"${latex}$")
         output = self.__injected_sourcecode_path + ".png"
-        fig.savefig(output, dpi=100, bbox_inches="tight")
+        fig.savefig(output, dpi=300, bbox_inches="tight")
         plt.close()
         return output
