@@ -4,6 +4,8 @@
 
 from typing import TYPE_CHECKING
 from .expression_enum import QuantumExpression, expressions
+from .worker import MatrixNotFound
+from subprocess import TimeoutExpired
 
 if TYPE_CHECKING:
     from .converter_model import ConverterModel
@@ -84,8 +86,17 @@ class ConverterPresenter:
         self.view.show_progress_bar()
         try:
             await self.model.convert_and_draw()
-        except Exception as exc:
-            print(exc)
+        except RuntimeError:
+            self.view.show_alert_message("conversion processe error")
+        except TimeoutExpired:
+            self.view.show_alert_message("conversion process timeout error")
+        except FileNotFoundError:
+            self.view.show_alert_message("set file valid one")
+        except AttributeError:
+            self.view.show_alert_message("set input value")
+        except MatrixNotFound:
+            self.view.show_alert_message("visualization error")
+
         self.view.close_progress_bar()
 
     def on_view_destoryed(self) -> None:
