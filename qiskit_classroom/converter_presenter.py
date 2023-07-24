@@ -82,5 +82,8 @@ class ConverterPresenter:
         update result file path
         """
         self.view.show_progress_bar()
-        self.model.result_img_path = await self.model.convert_and_draw()
+        try:
+            await self.model.convert_and_draw()
+        except Exception as exc:
+            print(exc)
         self.view.close_progress_bar()

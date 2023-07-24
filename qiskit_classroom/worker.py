@@ -3,12 +3,20 @@
 """
 
 import asyncio
+import datetime
 import random
 from shutil import copyfile
 import string
 import sys
 import re
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 from .expression_enum import QuantumExpression
+
+mpl.rcParams.update(mpl.rcParamsDefault)
+mpl.rcParams["text.usetex"] = True
+mpl.rcParams['font.size'] = 20
+mpl.rcParams['text.latex.preamble'] = r'\usepackage{{amsmath}}'
 
 LATEX_MATRIX_PATTERN = (
     r"\\begin{bmatrix}\s*((?:\d+\s*&\s*)+\d+\s*\\\\\s*)+\\end{bmatrix}"
@@ -90,6 +98,8 @@ class ConverterWorker:
         Returns:
             str: path of subprocess created image
         """
+        print("now running")
+        print(datetime.datetime.now().time())
         self.__code_inject()
         proc = await asyncio.create_subprocess_exec(
             sys.executable,
@@ -107,7 +117,8 @@ class ConverterWorker:
             print(f"output {output}")
         if stderr:
             print(f"err {stderr.decode()}")
-
+        print("end at ")
+        print(datetime.datetime.now().time())
         if self.to_expression is QuantumExpression.MATRIX:
             # filtering latex syntax
             return self.matrix_draw(latex=output)
@@ -133,5 +144,9 @@ class ConverterWorker:
             raise MatrixNotFound(latex)
 
         latex = result.group()
-        print(latex)
-        return self.__injected_sourcecode_path + ".png"
+        fig = plt.figure()
+        fig.text(0, 0, rf"${latex}$", fontsize=12)
+        output = self.__injected_sourcecode_path + ".png"
+        fig.savefig(output)
+        plt.close()
+        return output

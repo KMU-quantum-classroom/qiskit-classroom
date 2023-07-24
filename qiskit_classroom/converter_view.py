@@ -148,6 +148,7 @@ class ConverterView(QWidget):
         self.progress_bar = QProgressDialog(
             "wait for progressing", "abort", 0, 0, parent=self
         )
+        self.progress_bar.close()
 
     def center(self) -> None:
         """
@@ -220,3 +221,12 @@ class ConverterView(QWidget):
         close progress bar dialog
         """
         self.progress_bar.close()
+
+    def show_confirm_dialog(self) -> None:
+        """take confirm to conversion"""
+        result = QMessageBox.question(
+            self, "Do convert?", "Conversion will process are you sure?"
+        )
+
+        if result == QMessageBox.StandardButton.Yes:
+            self.on_convert_push_button_clicked()

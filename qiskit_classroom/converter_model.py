@@ -124,5 +124,5 @@ class ConverterModel:
             self.sourcecode_path,
             self.expression_value_name,
         )
-        await worker.run()
+        self.result_img_path = await worker.run()
         return
