@@ -2,7 +2,7 @@
     module for ConverterModel
 """
 
-
+import os
 from .expression_enum import QuantumExpression
 from .worker import ConverterWorker
 
@@ -109,6 +109,7 @@ class ConverterModel:
 
     @result_img_path.setter
     def result_img_path(self, value: str) -> str:
+        self.remove_result_img_path()
         self.__result_img_path = value
         print(f"result img path change to {value}")
 
@@ -125,4 +126,9 @@ class ConverterModel:
             self.expression_value_name,
         )
         self.result_img_path = await worker.run()
-        return
+
+    def remove_result_img_path(self) -> None:
+        """remove generated img file"""
+        if self.__result_img_path is not None:
+            if os.path.isfile(self.__result_img_path):
+                os.remove(self.__result_img_path)

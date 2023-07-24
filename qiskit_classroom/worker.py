@@ -5,6 +5,7 @@
 import asyncio
 import datetime
 import random
+import os
 from shutil import copyfile
 import string
 import sys
@@ -118,6 +119,10 @@ class ConverterWorker:
             print(f"err {stderr.decode()}")
         print("end at ")
         print(datetime.datetime.now().time())
+
+        # remove injected source code
+        os.remove(self.__injected_sourcecode_path)
+
         if self.to_expression is QuantumExpression.MATRIX:
             # filtering latex syntax
             return self.matrix_draw(latex=output)

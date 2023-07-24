@@ -87,3 +87,6 @@ class ConverterPresenter:
         except Exception as exc:
             print(exc)
         self.view.close_progress_bar()
+
+    def on_view_destoryed(self) -> None:
+        self.model.remove_result_img_path()
