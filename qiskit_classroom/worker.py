@@ -13,10 +13,9 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from .expression_enum import QuantumExpression
 
-mpl.rcParams.update(mpl.rcParamsDefault)
+mpl.rcParams["font.size"] = 12
 mpl.rcParams["text.usetex"] = True
-mpl.rcParams['font.size'] = 20
-mpl.rcParams['text.latex.preamble'] = r'\usepackage{{amsmath}}'
+mpl.rcParams["text.latex.preamble"] = r"\usepackage{{amsmath}}"
 
 LATEX_MATRIX_PATTERN = (
     r"\\begin{bmatrix}\s*((?:\d+\s*&\s*)+\d+\s*\\\\\s*)+\\end{bmatrix}"
@@ -143,10 +142,12 @@ class ConverterWorker:
         if result is None:
             raise MatrixNotFound(latex)
 
-        latex = result.group()
+        # this code avoid latex runtime error (\n ocurse error)
+        latex = result.group().replace("\n", " ")
+
         fig = plt.figure()
-        fig.text(0, 0, rf"${latex}$", fontsize=12)
+        fig.text(0.1, 0.5, f"${latex}$")
         output = self.__injected_sourcecode_path + ".png"
-        fig.savefig(output)
+        fig.savefig(output, dpi=100, bbox_inches="tight")
         plt.close()
         return output
