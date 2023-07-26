@@ -9,7 +9,6 @@ import os
 from shutil import copyfile
 import string
 import sys
-import re
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from .expression_enum import QuantumExpression
@@ -18,9 +17,6 @@ mpl.rcParams["font.size"] = 12
 mpl.rcParams["text.usetex"] = True
 mpl.rcParams["text.latex.preamble"] = r"\usepackage{{amsmath}}"
 
-LATEX_MATRIX_PATTERN = (
-    r"\\begin{bmatrix}\s*((?:\d+\s*&\s*)+\d+\s*\\\\\s*)+\\end{bmatrix}"
-)
 
 
 class MatrixNotFound(Exception):
@@ -115,21 +111,19 @@ class ConverterWorker:
         if stdout:
             output = stdout.decode()
             print(f"output {output}")
-        if stderr:
-            print(f"err {stderr.decode()}")
         print("end at ")
         print(datetime.datetime.now().time())
 
         # remove injected source code
         os.remove(self.__injected_sourcecode_path)
 
-        if self.to_expression is QuantumExpression.MATRIX:
+        if self.to_expression is not QuantumExpression.CIRCUIT:
             # filtering latex syntax
-            return self.matrix_draw(latex=output)
+            return self.draw_latex(latex=output)
 
-        return self.__injected_sourcecode_path + ".jpg"
+        return self.__injected_sourcecode_path + ".png"
 
-    def matrix_draw(self, latex: str) -> str:
+    def draw_latex(self, latex: str) -> str:
         """
         render latex to image and save as file.
 
@@ -142,13 +136,9 @@ class ConverterWorker:
         Returns:
             str: image file path
         """
-        pattern = re.compile(LATEX_MATRIX_PATTERN)
-        result = pattern.search(latex)
-        if result is None:
-            raise MatrixNotFound(latex)
 
         # this code avoid latex runtime error (\n ocurse error)
-        latex = result.group().replace("\n", " ")
+        latex = latex.replace("\n", " ").strip()
 
         fig = plt.figure()
         fig.text(0, 0, f"${latex}$")
