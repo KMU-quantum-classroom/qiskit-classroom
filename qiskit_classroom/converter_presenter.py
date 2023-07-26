@@ -2,10 +2,9 @@
     presenter for converter view
 """
 
+from subprocess import TimeoutExpired
 from typing import TYPE_CHECKING
 from .expression_enum import QuantumExpression, expressions
-from .worker import MatrixNotFound
-from subprocess import TimeoutExpired
 
 if TYPE_CHECKING:
     from .converter_model import ConverterModel
@@ -84,8 +83,9 @@ class ConverterPresenter:
         update result file path
         """
         self.view.show_progress_bar()
+        result = False
         try:
-            await self.model.convert_and_draw()
+            result = await self.model.convert_and_draw()
         except RuntimeError:
             self.view.show_alert_message("conversion processe error")
         except TimeoutExpired:
@@ -94,10 +94,15 @@ class ConverterPresenter:
             self.view.show_alert_message("set file valid one")
         except AttributeError:
             self.view.show_alert_message("set input value")
-        except MatrixNotFound:
-            self.view.show_alert_message("visualization error")
+        finally:
+            self.view.close_progress_bar()
 
-        self.view.close_progress_bar()
+        if result:
+            self.view.show_result_image(self.model.result_img_path)
+            # remove after showing image
+            self.model.remove_result_img_path()
+        self.model.result_img_path = ""
 
     def on_view_destoryed(self) -> None:
+        """remove image file on view destryed"""
         self.model.remove_result_img_path()

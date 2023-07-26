@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (
 )
 from qasync import asyncSlot
 from qiskit_classroom.expression_enum import expressions
+from qiskit_classroom.result_image_dialog import ResultImageDialog
 
 
 if TYPE_CHECKING:
@@ -230,3 +231,11 @@ class ConverterView(QWidget):
 
         if result == QMessageBox.StandardButton.Yes:
             self.on_convert_push_button_clicked()
+
+    def show_result_image(self, image_path: str) -> None:
+        """show result image by ResultImageDialog
+
+        Args:
+            image_path (str): image path want to show
+        """
+        ResultImageDialog(self).show_image(image_path=image_path)
