@@ -18,16 +18,16 @@ mpl.rcParams["text.usetex"] = True
 mpl.rcParams["text.latex.preamble"] = r"\usepackage{{amsmath}}"
 
 
-
-class MatrixNotFound(Exception):
-    """raise when there is no Matrix in output
+def add_new_line(strings: list[str]) -> str:
+    """add \\n between every line
 
     Args:
-        Exception (str): output message
-    """
+        strings (list[str]): list of line
 
-    def __init__(self, output) -> None:
-        super().__init__(output)
+    Returns:
+        str: joined string with \\n
+    """
+    return "\n".join(strings)
 
 
 class ConverterWorker:
@@ -63,29 +63,47 @@ class ConverterWorker:
         ) as injected_file:
             # write converting codes
             injected_file.write(
-                "from qiskit_class_converter import ConversionService\n"
-                + "from qiskit.visualization import array_to_latex"
+                add_new_line(
+                    [
+                        "from qiskit_class_converter import ConversionService",
+                        "from qiskit.visualization import array_to_latex",
+                        self.__convert_code(),
+                        self.__drawing_code(),
+                    ]
+                )
             )
-            injected_file.write(self.__convert_code())
-            injected_file.write(self.__drawing_code())
             injected_file.close()
 
     def __convert_code(self) -> str:
         if self.to_expression == self.from_expression:
             return ""
-        first_line = (
-            "\nconverter = ConversionService(conversion_type="
-            + f"'{self.from_expression.value[1]}_TO_{self.to_expression.value[1]}')"
+        option = (
+            '{"print" : "raw"}'
+            if self.to_expression is QuantumExpression.DIRAC
+            else "None"
         )
-        next_line = f"\nresult = converter.convert(input_value={self.value_name})"
+        first_line = (
+            "converter = ConversionService(conversion_type="
+            + f"'{self.from_expression.value[1]}_TO_{self.to_expression.value[1]}', "
+            + f"option={option})"
+        )
+        next_line = f"result = converter.convert(input_value={self.value_name})"
         if self.from_expression is QuantumExpression.MATRIX:
             pass
 
-        return first_line + next_line
+        return add_new_line([first_line, next_line])
 
     def __drawing_code(self) -> str:
         if self.to_expression is QuantumExpression.MATRIX:
-            return "\nsource = array_to_latex(result['result'], source=True)\nprint(source)"
+            return add_new_line(
+                [
+                    "source = array_to_latex(result['result'], source=True)",
+                    "print(source)",
+                ]
+            )
+
+        elif self.to_expression is QuantumExpression.DIRAC:
+            return add_new_line(["print(result)"])
 
     async def run(self) -> str:
         """inject expression convert code to user's source code and create
@@ -103,7 +121,7 @@ class ConverterWorker:
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
         )
-        stdout, stderr = await proc.communicate()
+        stdout, _ = await proc.communicate()
 
         await proc.wait()
         output: str = ""
