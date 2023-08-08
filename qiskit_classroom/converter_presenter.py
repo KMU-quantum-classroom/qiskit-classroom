@@ -2,6 +2,7 @@
     presenter for converter view
 """
 
+import asyncio
 from subprocess import TimeoutExpired
 from typing import TYPE_CHECKING
 from .expression_enum import QuantumExpression, expressions
@@ -98,10 +99,10 @@ class ConverterPresenter:
             self.view.close_progress_bar()
 
         if result:
+            # wait until file save
+            await asyncio.sleep(0.5)
             self.view.show_result_image(self.model.result_img_path)
             # remove after showing image
-            self.model.remove_result_img_path()
-        self.model.result_img_path = ""
 
     def on_view_destoryed(self) -> None:
         """remove image file on view destryed"""

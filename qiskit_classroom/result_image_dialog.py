@@ -2,7 +2,9 @@
     image dialog
 """
 
+# pylint: disable=no-name-in-module
 from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QLabel
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap
 
 
@@ -14,10 +16,11 @@ class ResultImageDialog(QDialog):
     def __init__(self, parent) -> None:
         super(ResultImageDialog, self).__init__(parent)
         self.setWindowTitle("Result Image")
-        self.setContentsMargins(50, 50, 50, 50)
+        self.setMinimumWidth(300)
+        self.setMinimumHeight(200)
 
         vbox = QVBoxLayout(self)
-        vbox.setContentsMargins(10, 10, 10, 10)
+        vbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.image_label = QLabel()
         vbox.addWidget(self.image_label)
 
@@ -33,9 +36,10 @@ class ResultImageDialog(QDialog):
         """
         img = QPixmap(image_path)
         self.image_label.setPixmap(img)
-        self.image_label.show()
+        # resize dialog by image size
+        self.resize(img.width() + 100, img.height() + 150)
         self.show()
 
-    def hideEvent(self, event) -> None:
+    def hideEvent(self, event) -> None:  # pylint: disable=invalid-name
         self.image_label.clear()
         return super().hideEvent(event)
