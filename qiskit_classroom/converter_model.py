@@ -98,7 +98,7 @@ class ConverterModel:
     def sourcecode_path(self, value: str) -> None:
         self.__sourcecode_path = value
 
-        print(f"sourcecod path change to {value}")
+        print(f"sourcecode path change to {value}")
 
     @property
     def result_img_path(self) -> str:
@@ -114,7 +114,7 @@ class ConverterModel:
 
     # todo: add abort feature
     async def convert_and_draw(self) -> bool:
-        """_summary_
+        """run worker to converting expression and visualizating expression
 
         Returns:
             bool: if converting and drawing was success return true
@@ -126,7 +126,12 @@ class ConverterModel:
             self.sourcecode_path.strip(),
             self.expression_value_name.strip(),
         )
-        self.result_img_path = await worker.run()
+        img_path = await worker.run()
+
+        # replace image and remove previously generated image
+        if img_path is not None:
+            self.remove_result_img_path()
+            self.result_img_path = img_path
         return True
 
     def remove_result_img_path(self) -> None:
@@ -134,3 +139,4 @@ class ConverterModel:
         if self.__result_img_path is not None:
             if os.path.isfile(self.__result_img_path):
                 os.remove(self.__result_img_path)
+                print(f"remove {self.result_img_path}")

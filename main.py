@@ -22,6 +22,8 @@ async def main():
     def close_future(future: asyncio.Future, loop):
         loop.call_later(10, future.cancel)
         future.cancel()
+        # remove remain image
+        model.remove_result_img_path()
 
     loop = asyncio.get_event_loop()
     future = asyncio.Future()
