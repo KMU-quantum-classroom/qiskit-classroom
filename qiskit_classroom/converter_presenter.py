@@ -9,7 +9,7 @@ from .expression_enum import QuantumExpression, expressions
 
 if TYPE_CHECKING:
     from .converter_model import ConverterModel
-    from .converter_view import ConverterView, FileList
+    from .converter_view import ConverterView
 
 
 class ConverterPresenter:
@@ -65,13 +65,14 @@ class ConverterPresenter:
         """
         self.model.expression_value_name = self.view.value_name_text.text()
 
-    def on_file_path_droped(self, files: "FileList") -> None:
+    def on_file_path_droped(self, files: list[str]) -> None:
         """Choose the first one among multiple file addresses that end with .py
 
         Args:
-            files (FileList): multiple file address
+            files list[str]: multiple file address
         """
-        for file in files.files:
+
+        for file in files:
             if file.endswith(".py"):
                 self.model.sourcecode_path = file
                 self.view.set_droparea_imported(file)

@@ -41,7 +41,7 @@ class DropArea(QLabel):
     file drop area widget
     """
 
-    file_imported = Signal(FileList)
+    file_imported = Signal(object)
 
     def __init__(self, parent) -> None:
         super().__init__(parent=parent)
@@ -78,7 +78,7 @@ class DropArea(QLabel):
         """
         if event.mimeData().hasUrls():
             files = [u.toLocalFile() for u in event.mimeData().urls()]
-            self.file_imported.emit(FileList(files=files))
+            self.file_imported.emit(files)
             event.accept()
 
 
