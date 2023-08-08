@@ -17,4 +17,13 @@ class QuantumExpression(enum.Enum):
     NONE = -1
 
 
-expressions = [expression.name for expression in QuantumExpression]
+expressions: list[str] = [expression.name for expression in QuantumExpression]
+Converting_method: dict[QuantumExpression, list[QuantumExpression]] = {
+    QuantumExpression.NONE: [QuantumExpression.NONE],
+    QuantumExpression.CIRCUIT: [
+        QuantumExpression.DIRAC,
+        QuantumExpression.MATRIX,
+    ],
+    QuantumExpression.MATRIX: [QuantumExpression.CIRCUIT],
+    QuantumExpression.DIRAC: [QuantumExpression.MATRIX],
+}

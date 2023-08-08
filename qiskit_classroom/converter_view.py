@@ -4,6 +4,8 @@
 
 
 from typing import TYPE_CHECKING
+
+# pylint: disable=no-name-in-module
 from PySide6.QtGui import QDragEnterEvent, QDropEvent
 from PySide6.QtCore import QSize, Qt, Signal
 from PySide6.QtWidgets import (
@@ -23,7 +25,11 @@ from qiskit_class_converter import (
     __FULL_VERSION__ as qiskit_classroom_converter_version,
 )
 from qasync import asyncSlot
-from qiskit_classroom.expression_enum import expressions
+from qiskit_classroom.expression_enum import (
+    expressions,
+    Converting_method,
+    QuantumExpression,
+)
 from qiskit_classroom.result_image_dialog import ResultImageDialog
 
 
@@ -99,7 +105,7 @@ class ConverterView(QWidget):
         """
         self.setWindowTitle("Converter")
         self.setContentsMargins(50, 50, 50, 50)
-        self.setFixedSize(QSize(500, 600))
+        self.setMinimumSize(QSize(500, 600))
 
         vbox = QVBoxLayout(self)
         vbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -128,8 +134,10 @@ class ConverterView(QWidget):
         to_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.from_combo = QComboBox()
         self.from_combo.addItems(expressions)
+        self.from_combo.setCurrentIndex(3)
         self.to_combo = QComboBox()
-        self.to_combo.addItems(expressions)
+        self.to_combo.addItem(Converting_method[QuantumExpression.NONE][0].name)
+        self.to_combo.setMinimumContentsLength(len(QuantumExpression.CIRCUIT.name))
         converting_form_box.addWidget(from_label)
         converting_form_box.addWidget(self.from_combo)
         converting_form_box.addWidget(to_label)

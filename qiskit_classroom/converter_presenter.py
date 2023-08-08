@@ -5,7 +5,7 @@
 import asyncio
 from subprocess import TimeoutExpired
 from typing import TYPE_CHECKING
-from .expression_enum import QuantumExpression, expressions
+from .expression_enum import QuantumExpression, Converting_method
 
 if TYPE_CHECKING:
     from .converter_model import ConverterModel
@@ -43,10 +43,12 @@ class ConverterPresenter:
         self.model.from_expression = QuantumExpression[
             self.view.from_combo.currentText()
         ]
-        if self.model.from_expression == QuantumExpression.MATRIX:
-            self.view.set_to_combo_items([QuantumExpression.CIRCUIT.name])
-        else:
-            self.view.set_to_combo_items(expressions)
+        self.view.set_to_combo_items(
+            [
+                expression.name
+                for expression in Converting_method[self.model.from_expression]
+            ]
+        )
 
     def on_to_combo_changed(self) -> None:
         """
