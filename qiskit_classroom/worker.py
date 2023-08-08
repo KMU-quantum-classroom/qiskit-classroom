@@ -15,7 +15,7 @@ from .expression_enum import QuantumExpression
 
 mpl.rcParams["font.size"] = 12
 mpl.rcParams["text.usetex"] = True
-mpl.rcParams["text.latex.preamble"] = r"\usepackage{{amsmath}}"
+mpl.rcParams["text.latex.preamble"] = r"\usepackage{{amsmath}}\usepackage{{qcircuit}}"
 
 
 def add_new_line(strings: list[str]) -> str:
@@ -102,8 +102,9 @@ class ConverterWorker:
                 ]
             )
 
-        elif self.to_expression is QuantumExpression.DIRAC:
+        if self.to_expression is QuantumExpression.DIRAC:
             return add_new_line(["print(result)"])
+        return ""
 
     async def run(self) -> str:
         """inject expression convert code to user's source code and create
