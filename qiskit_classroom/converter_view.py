@@ -18,6 +18,10 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QProgressDialog,
 )
+
+from qiskit_class_converter import (
+    __FULL_VERSION__ as qiskit_classroom_converter_version,
+)
 from qasync import asyncSlot
 from qiskit_classroom.expression_enum import expressions
 from qiskit_classroom.result_image_dialog import ResultImageDialog
@@ -26,14 +30,9 @@ from qiskit_classroom.result_image_dialog import ResultImageDialog
 if TYPE_CHECKING:
     from .converter_presenter import ConverterPresenter
 
-
-class FileList:
-    """
-    file name list for drop event
-    """
-
-    def __init__(self, files: list[str]) -> None:
-        self.files = files
+QISKIT_CLASSROOM_CONVERTER_VERSION_STR = " ".join(
+    [f"{key}: {value}" for key, value in qiskit_classroom_converter_version.items()]
+)
 
 
 class DropArea(QLabel):
@@ -140,10 +139,15 @@ class ConverterView(QWidget):
         self.convert_button = QPushButton("Convert")
         self.convert_button.clicked.connect(self.on_convert_push_button_clicked)
 
+        version_label = QLabel(
+            f"Run on [{QISKIT_CLASSROOM_CONVERTER_VERSION_STR}]", self
+        )
+
         vbox.addLayout(load_box)
         vbox.addLayout(value_name_box)
         vbox.addLayout(converting_form_box)
         vbox.addWidget(self.convert_button)
+        vbox.addWidget(version_label)
 
         # todo add abort feature
         self.progress_bar = QProgressDialog(
