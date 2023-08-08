@@ -1,5 +1,5 @@
-qiskit==0.43.2
+qiskit==0.44.0
 PySide6==6.5.1.1
 qasync==0.24.0
-qiskit-classroom-converter @ git+https://github.com/KMU-quantum-classroom/qiskit-classroom-converter@feature/bra-ket
+qiskit-classroom-converter==0.0.5
 matplotlib==3.7.2
