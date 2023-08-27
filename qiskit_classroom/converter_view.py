@@ -36,56 +36,6 @@ from qiskit_classroom.result_image_dialog import ResultImageDialog
 if TYPE_CHECKING:
     from .converter_presenter import ConverterPresenter
 
-QISKIT_CLASSROOM_CONVERTER_VERSION_STR = " ".join(
-    [f"{key}: {value}" for key, value in qiskit_classroom_converter_version.items()]
-)
-
-
-class DropArea(QLabel):
-    """
-    file drop area widget
-    """
-
-    file_imported = Signal(object)
-
-    def __init__(self, parent) -> None:
-        super().__init__(parent=parent)
-        self.setAcceptDrops(True)
-        self.set_ui()
-
-    def set_ui(self) -> None:
-        """
-        set UI
-        """
-        self.setWordWrap(True)
-        self.setFixedHeight(250)
-        self.setStyleSheet(
-            "border-style: dashed; border-width: 2px; color: blue; border-color: red;"
-        )
-        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setText("drop .py file here")
-
-    def dragEnterEvent(self, event: QDragEnterEvent) -> None:
-        # pylint: disable=invalid-name
-        """
-        handle drag event and accept only url
-        """
-        if event.mimeData().hasUrls():
-            event.accept()
-            self.setText("drop here")
-        else:
-            event.ignore()
-
-    def dropEvent(self, event: QDropEvent) -> None:
-        # pylint: disable=invalid-name
-        """
-        handle drop event and emit file imported event
-        """
-        if event.mimeData().hasUrls():
-            files = [u.toLocalFile() for u in event.mimeData().urls()]
-            self.file_imported.emit(files)
-            event.accept()
-
 
 class ConverterView(QWidget):
     """
