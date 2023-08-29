@@ -116,7 +116,6 @@ class ConverterPresenter:
                 self.view.to_combo.currentText()
             ]
 
-    # todo: error handling, data validation
     async def on_convert_button_clicked(self) -> None:
         """
         convert expression and visualiazation.

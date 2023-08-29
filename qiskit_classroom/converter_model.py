@@ -20,6 +20,7 @@ class ConvertingRuleException(Exception):
         )
 
 
+# pylint: disable=too-many-instance-attributes
 class ConverterModel:
     """
     class for converter

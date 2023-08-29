@@ -3,6 +3,7 @@ import random
 import string
 
 
+# pylint: disable=too-few-public-methods
 class Input:
     """contain user input value"""
 
@@ -18,6 +19,7 @@ class Input:
         return ""
 
 
+# pylint: disable=too-few-public-methods
 class QuantumCircuitInput(Input):
     """user input value for QuantumCircuit"""
 
@@ -29,10 +31,12 @@ class QuantumCircuitInput(Input):
         return "value_name : " + self.value_name
 
 
+# pylint: disable=too-few-public-methods
 class DiracInput(Input):
     """user input value for Dirac notation"""
 
 
+# pylint: disable=too-few-public-methods
 class MatrixInput(Input):
     """user input value for Matrix"""
 

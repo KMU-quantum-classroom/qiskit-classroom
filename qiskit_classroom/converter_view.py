@@ -41,6 +41,7 @@ if TYPE_CHECKING:
     from .converter_presenter import ConverterPresenter
 
 
+# pylint: disable=too-many-instance-attributes
 class ConverterView(QWidget):
     """
     converter view class
