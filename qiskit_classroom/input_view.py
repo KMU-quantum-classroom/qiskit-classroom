@@ -176,7 +176,7 @@ class MatrixInputWidget(InputWidget):
         self.num_cubit_text = QLineEdit(self)
         self.num_cubit_text.setToolTip("input 3 digits number")
         self.do_measure_checkbox = QCheckBox("do measure this circuit?", self)
-        self.do_measure_checkbox.setToolTip("do measure all cubits")
+        self.do_measure_checkbox.setToolTip("do measure all qubits")
 
         hbox.addWidget(num_cubit_label)
         hbox.addWidget(self.num_cubit_text)

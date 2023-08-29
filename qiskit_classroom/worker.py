@@ -68,8 +68,11 @@ class ConverterWorker:
         Returns:
             bool: is succesful
         """
-        with open(file_path, mode="w", encoding="UTF-8") as file:
-            file.write(code)
+        try:
+            with open(file_path, mode="w", encoding="UTF-8") as file:
+                file.write(code)
+        except FileNotFoundError:
+            return False
         return True
 
     def __code_inject(self):
@@ -93,11 +96,14 @@ class ConverterWorker:
     def __convert_code(self) -> str:
         if self.to_expression == self.from_expression:
             return ""
-        option = "None"
+        matrix_to_qc_option: dict[str, str] = {"label": "unitary gate"}
+        default_option: dict[str, str] = {"print": "raw"}
+
+        option: dict[str, str] = {}
         if self.to_expression is QuantumExpression.CIRCUIT:
-            option = '{"label":"matrix gate"}'
+            option = matrix_to_qc_option
         else:
-            option = '{"print":"raw"}'
+            option = default_option
         first_line = (
             "converter = ConversionService(conversion_type="
             + f"'{self.from_expression.value[1]}_TO_{self.to_expression.value[1]}', "
