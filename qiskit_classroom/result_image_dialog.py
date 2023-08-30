@@ -14,7 +14,7 @@ class ResultImageDialog(QDialog):
     """
 
     def __init__(self, parent) -> None:
-        super(ResultImageDialog, self).__init__(parent)
+        super().__init__(parent)
         self.setWindowTitle("Result Image")
         self.setMinimumWidth(300)
         self.setMinimumHeight(200)
@@ -41,5 +41,10 @@ class ResultImageDialog(QDialog):
         self.show()
 
     def hideEvent(self, event) -> None:  # pylint: disable=invalid-name
+        """remove image
+
+        Args:
+            event (_type_): default event argument
+        """
         self.image_label.clear()
         return super().hideEvent(event)

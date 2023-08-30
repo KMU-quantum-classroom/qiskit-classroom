@@ -5,6 +5,7 @@
 import os
 from .expression_enum import QuantumExpression
 from .worker import ConverterWorker
+from .input_model import Input
 
 
 class ConvertingRuleException(Exception):
@@ -19,23 +20,18 @@ class ConvertingRuleException(Exception):
         )
 
 
+# pylint: disable=too-many-instance-attributes
 class ConverterModel:
     """
     class for converter
     """
 
-    __from_expression: QuantumExpression
-    __to_expression: QuantumExpression
-    __expression_value_name: str
-    __sourcecode_path: str
-    __result_img_path: str
-
     def __init__(self) -> None:
         self.__from_expression = None
         self.__to_expression = None
-        self.__expression_value_name = ""
-        self.__sourcecode_path = ""
         self.__result_img_path = ""
+        self.__input_data = None
+        self.__expression_text = ""
 
     @property
     def from_expression(self) -> QuantumExpression:
@@ -75,44 +71,48 @@ class ConverterModel:
         print(f"to exression changed to {value}")
 
     @property
-    def expression_value_name(self) -> str:
-        """
-        property of __expresion_value_name
-        """
-        return self.__expression_value_name
-
-    @expression_value_name.setter
-    def expression_value_name(self, value: str) -> None:
-        self.__expression_value_name = value
-
-        print(f"expression value name change to {value}")
-
-    @property
-    def sourcecode_path(self) -> str:
-        """
-        property of __sourcecode_path
-        """
-        return self.__sourcecode_path
-
-    @sourcecode_path.setter
-    def sourcecode_path(self, value: str) -> None:
-        self.__sourcecode_path = value
-
-        print(f"sourcecode path change to {value}")
-
-    @property
     def result_img_path(self) -> str:
+        """property of __result_img_path
+
+        Returns:
+            str: result_img_path
         """
-        property of __result_img_path
-        """
+
         return self.__result_img_path
 
     @result_img_path.setter
-    def result_img_path(self, value: str) -> str:
+    def result_img_path(self, value: str) -> None:
         self.__result_img_path = value
         print(f"result img path change to {value}")
 
-    # todo: add abort feature
+    @property
+    def input_data(self) -> Input:
+        """property of __input_date
+
+        Returns:
+            Input: user input data
+        """
+        return self.__input_data
+
+    @input_data.setter
+    def input_data(self, value: Input) -> None:
+        self.__input_data = value
+        print(f"input_data change to {value}")
+
+    @property
+    def expression_text(self) -> str:
+        """property of __expression_text
+
+        Returns:
+            str: expression text
+        """
+        return self.__expression_text
+
+    @expression_text.setter
+    def expression_text(self, value: str) -> None:
+        self.__expression_text = value
+        print(f"expression_text change to {value}")
+
     async def convert_and_draw(self) -> bool:
         """run worker to converting expression and visualizating expression
 
@@ -123,8 +123,8 @@ class ConverterModel:
         worker = ConverterWorker(
             self.from_expression,
             self.to_experssion,
-            self.sourcecode_path.strip(),
-            self.expression_value_name.strip(),
+            self.input_data,
+            self.expression_text,
         )
         img_path = await worker.run()
 

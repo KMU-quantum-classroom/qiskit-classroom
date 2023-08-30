@@ -6,12 +6,12 @@ import asyncio
 import datetime
 import random
 import os
-from shutil import copyfile
 import string
 import sys
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from .expression_enum import QuantumExpression
+from .input_model import Input, QuantumCircuitInput, MatrixInput
 
 mpl.rcParams["font.size"] = 12
 mpl.rcParams["text.usetex"] = True
@@ -33,63 +33,101 @@ def add_new_line(strings: list[str]) -> str:
 class ConverterWorker:
     """worker for convert expression and visualize expression"""
 
-    from_expression: QuantumExpression
-    to_expression: QuantumExpression
-    sourcecode_path: str
-    __injected_sourcecode_path: str
-    value_name: str
-
     def __init__(
         self,
         from_expression: QuantumExpression,
         to_expression: QuantumExpression,
-        sourcode_path: str,
-        value_name: str,
+        input_data: Input,
+        expression_text: str,
     ) -> None:
         self.from_expression = from_expression
         self.to_expression = to_expression
-        self.sourcecode_path = sourcode_path
-        self.__injected_sourcecode_path = (
-            self.sourcecode_path
-            + "".join(random.choice(string.ascii_letters) for _ in range(10))
-            + ".py"
-        )
-        self.value_name = value_name
+        self.__injected_sourcecode_path = ConverterWorker.generate_random_file_name()
+
+        # copy text
+        self.expression_text = "" + expression_text
+        self.input_data = input_data
+
+    @staticmethod
+    def generate_random_file_name() -> str:
+        """return generated file name
+
+        Returns:
+            str: generated file name
+        """
+        return "".join(random.choice(string.ascii_letters) for _ in range(10)) + ".py"
+
+    @staticmethod
+    def write_converting_code(file_path: str, code: str) -> bool:
+        """write code to file_path
+
+        Args:
+            file_path (str): target
+            code (str): contents
+
+        Returns:
+            bool: is succesful
+        """
+        try:
+            with open(file_path, mode="w", encoding="UTF-8") as file:
+                file.write(code)
+        except FileNotFoundError:
+            return False
+        return True
 
     def __code_inject(self):
-        copyfile(self.sourcecode_path, self.__injected_sourcecode_path)
-        with open(
-            self.__injected_sourcecode_path, mode="a", encoding="UTF-8"
-        ) as injected_file:
-            # write converting codes
-            injected_file.write(
-                add_new_line(
-                    [
-                        "from qiskit_class_converter import ConversionService",
-                        "from qiskit.visualization import array_to_latex",
-                        self.__convert_code(),
-                        self.__drawing_code(),
-                    ]
-                )
-            )
-            injected_file.close()
+        expression_text = self.expression_text
+        if self.from_expression is QuantumExpression.MATRIX:
+            input_data: MatrixInput = self.input_data
+            expression_text = f"{input_data.value_name}={expression_text}"
+        ConverterWorker.write_converting_code(
+            self.__injected_sourcecode_path,
+            add_new_line(
+                [
+                    expression_text,
+                    "from qiskit_class_converter import ConversionService",
+                    "from qiskit.visualization import array_to_latex",
+                    self.__convert_code(),
+                    self.__drawing_code(),
+                ]
+            ),
+        )
 
     def __convert_code(self) -> str:
         if self.to_expression == self.from_expression:
             return ""
-        option = (
-            '{"print" : "raw"}'
-            if self.to_expression is QuantumExpression.DIRAC
-            else "None"
-        )
+        matrix_to_qc_option: dict[str, str] = {"label": "unitary gate"}
+        default_option: dict[str, str] = {"print": "raw"}
+
+        option: dict[str, str] = {}
+        if self.to_expression is QuantumExpression.CIRCUIT:
+            option = matrix_to_qc_option
+        else:
+            option = default_option
         first_line = (
             "converter = ConversionService(conversion_type="
             + f"'{self.from_expression.value[1]}_TO_{self.to_expression.value[1]}', "
             + f"option={option})"
         )
-        next_line = f"result = converter.convert(input_value={self.value_name})"
+        next_line: str = ""
+        if self.from_expression is QuantumExpression.CIRCUIT:
+            quantum_circuit_input: QuantumCircuitInput = self.input_data
+            next_line = (
+                "result = converter.convert"
+                + f"(input_value={quantum_circuit_input.value_name})"
+            )
         if self.from_expression is QuantumExpression.MATRIX:
-            pass
+            matrix_input: MatrixInput = self.input_data
+            next_line = add_new_line(
+                [
+                    "from qiskit import QuantumCircuit",
+                    ""
+                    f"result = converter.convert(input_value={matrix_input.value_name})",
+                    f"quantum_circuit = QuantumCircuit({matrix_input.num_cubit})",
+                    f"quantum_circuit.append(result, {list(range(matrix_input.num_cubit))})",
+                    "quantum_circuit.measure_all()" if matrix_input.do_measure else "",
+                ]
+            )
 
         return add_new_line([first_line, next_line])
 
@@ -99,6 +137,15 @@ class ConverterWorker:
                 [
                     "source = array_to_latex(result['result'], source=True)",
                     "print(source)",
+                ]
+            )
+
+        if self.to_expression is QuantumExpression.CIRCUIT:
+            return add_new_line(
+                [
+                    'quantum_circuit.draw(output="mpl")'
+                    + f'.savefig("{self.__injected_sourcecode_path+".png"}", '
+                    + 'bbox_inches="tight")'
                 ]
             )
 
@@ -122,7 +169,7 @@ class ConverterWorker:
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
         )
-        stdout, _ = await proc.communicate()
+        stdout, stderr = await proc.communicate()
 
         await proc.wait()
         output: str = ""
@@ -130,17 +177,18 @@ class ConverterWorker:
         if stdout:
             output = stdout.decode()
             print(f"output {output}")
+        if stderr:
+            print(f"error {stderr.decode()}")
         print("end at ")
         print(datetime.datetime.now().time())
 
         # remove injected source code
         os.remove(self.__injected_sourcecode_path)
 
-        if self.to_expression is not QuantumExpression.CIRCUIT:
-            # filtering latex syntax
-            return self.draw_latex(latex=output)
+        if self.to_expression is QuantumExpression.CIRCUIT:
+            return self.__injected_sourcecode_path + ".png"
 
-        return self.__injected_sourcecode_path + ".png"
+        return self.draw_latex(latex=output)
 
     def draw_latex(self, latex: str) -> str:
         """

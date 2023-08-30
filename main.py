@@ -4,14 +4,29 @@ entry point for gui application
 import sys
 import asyncio
 import functools
+from PySide6.QtWidgets import QMainWindow, QStatusBar
 from qiskit_classroom.converter_view import ConverterView
 from qiskit_classroom.converter_model import ConverterModel
 from qiskit_classroom.converter_presenter import ConverterPresenter
+from qiskit_classroom import QISKIT_CLASSROOM_CONVERTER_VERSION_STR
 
 # rearranged it to tell qasync to use PySide6
 # pylint: disable=wrong-import-order
 import qasync
 from qasync import QApplication
+
+
+def move_center(window: QMainWindow):
+    """move window to center of screen
+
+    Args:
+        window (QMainWindow): main window
+    """
+    frame = window.frameGeometry()
+    center_position = window.screen().availableGeometry().center()
+
+    frame.moveCenter(center_position)
+    window.move(frame.topLeft())
 
 
 async def main():
@@ -34,13 +49,22 @@ async def main():
             functools.partial(close_future, future, loop)
         )
 
+    main_window = QMainWindow(None)
+    main_window.setWindowTitle("Qiskit_classroom")
+    version_bar = QStatusBar(main_window)
+    version_bar.showMessage("running on " + QISKIT_CLASSROOM_CONVERTER_VERSION_STR)
+    main_window.setStatusBar(version_bar)
+
     model = ConverterModel()
     view = ConverterView()
+
+    main_window.setCentralWidget(view)
 
     presenter = ConverterPresenter(view, model)
     view.set_presenter(presenter=presenter)
 
-    view.show()
+    main_window.show()
+    move_center(main_window)
 
     await future
     return True
