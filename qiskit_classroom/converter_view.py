@@ -6,7 +6,7 @@
 from typing import TYPE_CHECKING
 
 # pylint: disable=no-name-in-module
-from PySide6.QtCore import QSize, Qt
+from PySide6.QtCore import QSize, Qt, Signal
 from PySide6.QtWidgets import (
     QWidget,
     QLabel,
@@ -14,7 +14,6 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QPushButton,
-    QFileDialog,
     QMessageBox,
     QProgressDialog,
 )
@@ -47,6 +46,11 @@ class ConverterView(QWidget):
     converter view class
     """
 
+    from_combo_currentTextChanged = Signal()
+    to_combo_currentTextChanged = Signal()
+    file_dropped = Signal(object)
+    file_imported = Signal(str)
+
     def __init__(self) -> None:
         super().__init__()
         self.presenter = None
@@ -78,9 +82,15 @@ class ConverterView(QWidget):
         self.from_combo = QComboBox()
         self.from_combo.addItems(expressions)
         self.from_combo.setCurrentIndex(3)
+        self.from_combo.currentTextChanged.connect(
+            self.__on_from_combo_current_text_changed
+        )
         self.to_combo = QComboBox()
         self.to_combo.addItem(Converting_method[QuantumExpression.NONE][0].name)
         self.to_combo.setMinimumContentsLength(len(QuantumExpression.CIRCUIT.name))
+        self.to_combo.currentIndexChanged.connect(
+            self.__on_to_combo_current_text_changed
+        )
         converting_form_box.addWidget(from_label)
         converting_form_box.addWidget(self.from_combo)
         converting_form_box.addWidget(to_label)
@@ -95,7 +105,10 @@ class ConverterView(QWidget):
             QuantumExpression.DIRAC: DiracInputWidget(self),
         }
         vbox.addLayout(converting_form_box)
-        for input_widget in self.inputs.values():
+        for expression, input_widget in self.inputs.items():
+            if expression is QuantumExpression.CIRCUIT:
+                input_widget: QuantumCircuitInputWidget = input_widget
+                input_widget.file_imported.connect(self.__on_file_imported)
             vbox.addWidget(input_widget)
             input_widget.hide()
 
@@ -109,6 +122,13 @@ class ConverterView(QWidget):
         self.progress_bar.setCancelButton(None)
         self.progress_bar.setWindowTitle("now converting")
         self.progress_bar.close()
+
+    def connect_signal(self) -> None:
+        """connect signals to presenters slots"""
+        self.from_combo_currentTextChanged.connect(self.presenter.on_from_combo_changed)
+        self.to_combo_currentTextChanged.connect(self.presenter.on_to_combo_changed)
+        self.file_dropped.connect(self.presenter.on_file_dropped)
+        self.file_imported.connect(self.presenter.on_file_imported)
 
     def center(self) -> None:
         """
@@ -212,6 +232,7 @@ class ConverterView(QWidget):
             presenter (ConverterPresenter): presenter for ConverterView
         """
         self.presenter = presenter
+        self.connect_signal()
 
     def set_to_combo_items(self, items: list[str]) -> None:
         """set to_combo items

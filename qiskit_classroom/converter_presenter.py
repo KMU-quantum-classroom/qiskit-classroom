@@ -7,7 +7,6 @@ from subprocess import TimeoutExpired
 from typing import TYPE_CHECKING
 from .expression_enum import QuantumExpression, Converting_method
 from .input_model import Input
-from .input_view import QuantumCircuitInputWidget
 from .converter_model import ConvertingRuleException
 
 if TYPE_CHECKING:
@@ -40,14 +39,6 @@ class ConverterPresenter:
         self.view = view
         self.view.set_presenter(self)
         self.model = model
-        self.model.from_expression = QuantumExpression.CIRCUIT
-        self.view.from_combo.currentTextChanged.connect(self.on_from_combo_changed)
-        self.view.to_combo.currentTextChanged.connect(self.on_to_combo_changed)
-        self.view.expression_plain_text.file_dropped.connect(self.on_file_dropped)
-        quantumcircuit_input_widget: QuantumCircuitInputWidget = self.view.inputs[
-            QuantumExpression.CIRCUIT
-        ]
-        quantumcircuit_input_widget.file_imported.connect(self.on_file_imported)
 
     def on_file_dropped(self, file_paths: list[str]) -> None:
         """handling file drag and drop event
