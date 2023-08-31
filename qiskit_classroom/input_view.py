@@ -59,7 +59,6 @@ class ExpressionPlainText(QPlainTextEdit):
         """
         if event.mimeData().hasUrls():
             event.accept()
-            self.setText("drop here")
         else:
             event.ignore()
 
