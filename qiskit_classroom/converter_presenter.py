@@ -61,19 +61,11 @@ class ConverterPresenter:
         self.model.expression_text = open_file(file_path)
         self.view.set_expression_plain_text_text(self.model.expression_text)
 
-    def on_filepath_inputed(self, filepath: str) -> None:
-        """update sourcecode_path
-
-        Args:
-            filepath (str): filepath from view
-        """
-        self.model.sourcecode_path = filepath
-        self.view.set_droparea_imported(self.model.sourcecode_path)
-
     def on_from_combo_changed(self) -> None:
         """
         update from_expression
         """
+        self.view.disable_from_combo_current_text_change()
         from_expression = QuantumExpression[self.view.get_from_expression()]
         if from_expression is QuantumExpression.DIRAC:
             self.view.show_alert_message("not supported")
@@ -83,29 +75,33 @@ class ConverterPresenter:
         try:
             self.model.from_expression = from_expression
         except ConvertingRuleException:
-            self.model.to_experssion = QuantumExpression.NONE
+            self.model.to_expression = QuantumExpression.NONE
             self.model.from_expression = from_expression
 
+        # this line prevent triggering to_combo.currentIndexChanged event multiple time
+        # lock
+        self.view.disable_to_combo_current_text_change()
         self.view.set_to_combo_items(
             [
                 expression.name
                 for expression in Converting_method[self.model.from_expression]
             ]
         )
+        self.model.to_expression = Converting_method[self.model.from_expression][0]
+        # unlock
+        self.view.enable_to_combo_current_text_change()
+
         self.view.show_input_widget(self.model.from_expression)
         self.view.clear_expression_plain_text()
         self.view.set_placeholder(self.model.from_expression)
+
+        self.view.enable_from_combo_current_text_change()
 
     def on_to_combo_changed(self) -> None:
         """
         update to_expression
         """
-        if len(self.view.get_to_expression()) == 0:
-            self.model.to_experssion = QuantumExpression.CIRCUIT
-        else:
-            self.model.to_experssion = QuantumExpression[
-                self.view.to_combo.currentText()
-            ]
+        self.model.to_expression = QuantumExpression[self.view.get_to_expression()]
 
     async def on_convert_button_clicked(self) -> None:
         """

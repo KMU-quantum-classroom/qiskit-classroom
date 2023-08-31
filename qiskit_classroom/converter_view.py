@@ -72,6 +72,7 @@ class ConverterView(QWidget):
         vbox.setSpacing(30)
 
         self.expression_plain_text = ExpressionPlainText(self)
+        self.expression_plain_text.file_dropped.connect(self.__on_file_dropped)
         vbox.addWidget(self.expression_plain_text)
 
         converting_form_box = QHBoxLayout()
@@ -139,6 +140,30 @@ class ConverterView(QWidget):
 
         frame.moveCenter(center_position)
         self.move(frame.topLeft())
+
+    def __on_from_combo_current_text_changed(self) -> None:
+        self.from_combo_currentTextChanged.emit()
+
+    def disable_from_combo_current_text_change(self) -> None:
+        self.from_combo_currentTextChanged.disconnect()
+
+    def enable_from_combo_current_text_change(self) -> None:
+        self.from_combo_currentTextChanged.connect(self.presenter.on_from_combo_changed)
+
+    def __on_to_combo_current_text_changed(self) -> None:
+        self.to_combo_currentTextChanged.emit()
+
+    def disable_to_combo_current_text_change(self) -> None:
+        self.to_combo_currentTextChanged.disconnect()
+
+    def enable_to_combo_current_text_change(self) -> None:
+        self.to_combo_currentTextChanged.connect(self.presenter.on_to_combo_changed)
+
+    def __on_file_dropped(self, file_paths: list[str]) -> None:
+        self.file_dropped.emit(file_paths)
+
+    def __on_file_imported(self, file_path: str) -> None:
+        self.file_imported.emit(file_path)
 
     def get_to_expression(self) -> str:
         """return to_combo current text
@@ -215,15 +240,6 @@ class ConverterView(QWidget):
             str: plainText
         """
         return self.expression_plain_text.toPlainText()
-
-    def on_file_load_clicked(self) -> None:
-        """
-        handling file dialog
-        """
-        filename = QFileDialog.getOpenFileName(
-            self, "Open .py", "", "python3 script (*.py)"
-        )[0]
-        self.presenter.on_filepath_inputed(filename)
 
     def set_presenter(self, presenter: "ConverterPresenter") -> None:
         """set presenter
