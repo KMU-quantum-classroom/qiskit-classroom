@@ -22,19 +22,22 @@ RANDOM_FILE_NAME = "random_file_name"
 
 
 QC_TO_MATRIX_EXPECTED = [
-    f"""converter = ConversionService(conversion_type='QC_TO_MATRIX', option={{'print': 'raw'}})
-result = converter.convert(input_value={VALUE_NAME})""",
+    "converter = ConversionService(conversion_type='QC_TO_MATRIX',"
+    + "option={{'print': 'raw'}})"
+    + f"result = converter.convert(input_value={VALUE_NAME})",
     """print(result['result'])""",
 ]
 
 MATRIX_TO_QC_EXPECTED = [
-    f"""converter = ConversionService(conversion_type='MATRIX_TO_QC', option={{'label': 'unitary gate'}})
-from qiskit import QuantumCircuit
-result = converter.convert(input_value={VALUE_NAME})
+    "converter = ConversionService(conversion_type='MATRIX_TO_QC',"
+    + "option={{'label': 'unitary gate'}})"
+    + "from qiskit import QuantumCircuit"
+    + f"""result = converter.convert(input_value={VALUE_NAME})
 quantum_circuit = QuantumCircuit(2)
 quantum_circuit.append(result, list(range(result.num_qubits)))
 quantum_circuit.measure_all()""",
-    f"""quantum_circuit.draw(output="mpl").savefig("{RANDOM_FILE_NAME + ".png"}", bbox_inches="tight")""",
+    f"""quantum_circuit.draw(output="mpl").savefig("{RANDOM_FILE_NAME + ".png"}", """
+    + """bbox_inches="tight")""",
 ]
 
 
@@ -144,6 +147,7 @@ class ConverterWorkerTest(unittest.IsolatedAsyncioTestCase):
         worker.draw_latex.assert_called_once()
 
     async def test_run_matrix_to_quantum_circuit(self):
+        """test run matrix to quantum circuit"""
         worker = ConverterWorker(
             QuantumExpression.MATRIX,
             QuantumExpression.CIRCUIT,

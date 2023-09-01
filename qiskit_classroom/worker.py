@@ -33,6 +33,7 @@ def add_new_line(strings: list[str]) -> str:
     return "\n".join(strings)
 
 
+# pylint: disable=too-many-instance-attributes
 class ConverterWorker:
     """worker for convert expression and visualize expression"""
 

@@ -10,7 +10,7 @@ from qiskit_classroom.expression_enum import QuantumExpression
 PATH = ["not_python_script.txt", "ramdom_file.py"]
 
 
-class ConverterPresenterTest(unittest.TestCase):
+class ConverterPresenterTest(unittest.IsolatedAsyncioTestCase):
     """unittest class ConverterPresenter"""
 
     def setUp(self) -> None:
@@ -66,6 +66,7 @@ class ConverterPresenterTest(unittest.TestCase):
         self.assertEqual(self.model.to_expression, QuantumExpression.CIRCUIT)
 
     def test_on_to_combo_changed(self) -> None:
+        """test on combo changed"""
         self.view.get_to_expression = mock.Mock(return_value="CIRCUIT")
 
         self.presenter.on_to_combo_changed()

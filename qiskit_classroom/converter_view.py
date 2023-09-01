@@ -41,6 +41,7 @@ if TYPE_CHECKING:
 
 
 # pylint: disable=too-many-instance-attributes
+# pylint: disable=too-many-public-methods
 class ConverterView(QWidget):
     """
     converter view class
@@ -145,18 +146,22 @@ class ConverterView(QWidget):
         self.from_combo_currentTextChanged.emit()
 
     def disable_from_combo_current_text_change(self) -> None:
+        """disable event handling from_combo_currentTextChanged"""
         self.from_combo_currentTextChanged.disconnect()
 
     def enable_from_combo_current_text_change(self) -> None:
+        """endable event handling from_combo_currentTextChanged"""
         self.from_combo_currentTextChanged.connect(self.presenter.on_from_combo_changed)
 
     def __on_to_combo_current_text_changed(self) -> None:
         self.to_combo_currentTextChanged.emit()
 
     def disable_to_combo_current_text_change(self) -> None:
+        """disable event handling to_combo_currentTextChanged"""
         self.to_combo_currentTextChanged.disconnect()
 
     def enable_to_combo_current_text_change(self) -> None:
+        """endable event handling to_combo_currentTextChanged"""
         self.to_combo_currentTextChanged.connect(self.presenter.on_to_combo_changed)
 
     def __on_file_dropped(self, file_paths: list[str]) -> None:
