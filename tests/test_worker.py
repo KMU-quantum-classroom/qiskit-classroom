@@ -23,15 +23,15 @@ RANDOM_FILE_NAME = "random_file_name"
 
 QC_TO_MATRIX_EXPECTED = [
     "converter = ConversionService(conversion_type='QC_TO_MATRIX',"
-    + "option={{'print': 'raw'}})"
+    + " option={'print': 'raw'})\n"
     + f"result = converter.convert(input_value={VALUE_NAME})",
     """print(result['result'])""",
 ]
 
 MATRIX_TO_QC_EXPECTED = [
     "converter = ConversionService(conversion_type='MATRIX_TO_QC',"
-    + "option={{'label': 'unitary gate'}})"
-    + "from qiskit import QuantumCircuit"
+    + " option={'label': 'unitary gate'})\n"
+    + "from qiskit import QuantumCircuit\n"
     + f"""result = converter.convert(input_value={VALUE_NAME})
 quantum_circuit = QuantumCircuit(2)
 quantum_circuit.append(result, list(range(result.num_qubits)))
