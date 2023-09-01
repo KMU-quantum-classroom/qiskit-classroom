@@ -22,3 +22,9 @@ class TestConverterModel(unittest.TestCase):
         self.model.from_expression = QuantumExpression.MATRIX
         with self.assertRaises(ConvertingRuleException):
             self.model.to_expression = QuantumExpression.DIRAC
+
+    def test_set_img_path(self) -> None:
+        """test setter image_path"""
+        self.model.result_img_path = "random_file.py.png"
+
+        self.assertEqual(self.model.result_img_path, "random_file.py.png")
