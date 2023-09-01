@@ -15,6 +15,7 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.9', '3.10', '3.11']
+        qt-lib: [pyqt5, pyqt6, pyside2, pyside6] 
 
     steps:
     - uses: actions/checkout@v3
@@ -25,7 +26,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install ffmpeg libsm6 libxext6 libgl1-mesa-glx -y
+        sudo apt install ffmpeg libsm6 libxext6 libgl2-mesa-glx -y
         python -m pip install --upgrade pip
         python -m pip install tox tox-gh-actions
     - name: Test with tox
