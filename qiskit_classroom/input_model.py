@@ -40,10 +40,10 @@ class DiracInput(Input):
 class MatrixInput(Input):
     """user input value for Matrix"""
 
-    def __init__(self, num_cubit: int, do_measure: bool) -> None:
+    def __init__(self, num_qubits: int, do_measure: bool) -> None:
         super().__init__()
         self.value_name = "".join(
             random.choice(string.ascii_letters) for _ in range(10)
         )
-        self.num_cubit = num_cubit
+        self.num_qubits = num_qubits
         self.do_measure = do_measure

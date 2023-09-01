@@ -17,6 +17,9 @@ mpl.rcParams["font.size"] = 12
 mpl.rcParams["text.usetex"] = True
 mpl.rcParams["text.latex.preamble"] = r"\usepackage{{amsmath}}\usepackage{{qcircuit}}"
 
+ARRAY_TO_LATEX_IMPORT = "from qiskit.visualization import array_to_latex"
+CONVERTER_IMPORT = "from qiskit_class_converter import ConversionService"
+
 
 def add_new_line(strings: list[str]) -> str:
     """add \\n between every line
@@ -30,6 +33,7 @@ def add_new_line(strings: list[str]) -> str:
     return "\n".join(strings)
 
 
+# pylint: disable=too-many-instance-attributes
 class ConverterWorker:
     """worker for convert expression and visualize expression"""
 
@@ -49,7 +53,8 @@ class ConverterWorker:
         self.input_data = input_data
 
     @staticmethod
-    def generate_random_file_name() -> str:
+    def generate_random_file_name() -> str:  # pragma: no cover
+        # this method implmented with random function
         """return generated file name
 
         Returns:
@@ -58,7 +63,7 @@ class ConverterWorker:
         return "".join(random.choice(string.ascii_letters) for _ in range(10)) + ".py"
 
     @staticmethod
-    def write_converting_code(file_path: str, code: str) -> bool:
+    def write_converting_code(file_path: str, code: str) -> bool:  # pragma: no cover
         """write code to file_path
 
         Args:
@@ -75,7 +80,7 @@ class ConverterWorker:
             return False
         return True
 
-    def __code_inject(self):
+    def __generate_code(self):  # pragma: no cover
         expression_text = self.expression_text
         if self.from_expression is QuantumExpression.MATRIX:
             input_data: MatrixInput = self.input_data
@@ -85,15 +90,20 @@ class ConverterWorker:
             add_new_line(
                 [
                     expression_text,
-                    "from qiskit_class_converter import ConversionService",
-                    "from qiskit.visualization import array_to_latex",
-                    self.__convert_code(),
-                    self.__drawing_code(),
+                    CONVERTER_IMPORT,
+                    ARRAY_TO_LATEX_IMPORT,
+                    self.generate_conversion_code(),
+                    self.generate_visualization_code(),
                 ]
             ),
         )
 
-    def __convert_code(self) -> str:
+    def generate_conversion_code(self) -> str:
+        """generate the conversion code according to the conversion method.
+
+        Returns:
+            str: generated conversion code
+        """
         if self.to_expression == self.from_expression:
             return ""
         matrix_to_qc_option: dict[str, str] = {"label": "unitary gate"}
@@ -123,22 +133,22 @@ class ConverterWorker:
                     "from qiskit import QuantumCircuit",
                     ""
                     f"result = converter.convert(input_value={matrix_input.value_name})",
-                    f"quantum_circuit = QuantumCircuit({matrix_input.num_cubit})",
-                    f"quantum_circuit.append(result, {list(range(matrix_input.num_cubit))})",
+                    f"quantum_circuit = QuantumCircuit({matrix_input.num_qubits})",
+                    "quantum_circuit.append(result, list(range(result.num_qubits)))",
                     "quantum_circuit.measure_all()" if matrix_input.do_measure else "",
                 ]
             )
 
         return add_new_line([first_line, next_line])
 
-    def __drawing_code(self) -> str:
+    def generate_visualization_code(self) -> str:
+        """generate visualiszation code according to the conversion method
+
+        Returns:
+            str: visualization code
+        """
         if self.to_expression is QuantumExpression.MATRIX:
-            return add_new_line(
-                [
-                    "source = array_to_latex(result['result'], source=True)",
-                    "print(source)",
-                ]
-            )
+            return add_new_line(["print(result['result'])"])
 
         if self.to_expression is QuantumExpression.CIRCUIT:
             return add_new_line(
@@ -162,7 +172,32 @@ class ConverterWorker:
         """
         print("now running")
         print(datetime.datetime.now().time())
-        self.__code_inject()
+        self.__generate_code()
+        stdout, stderr = await self.run_subprocess()
+
+        if stdout:
+            print(f"output {stdout}")
+        if stderr:
+            stderr: str = stderr
+            print(f"error {stderr}")
+        print("end at ")
+        print(datetime.datetime.now().time())
+
+        # remove injected source code
+        if not self.cleanup():
+            print("error removing file")
+
+        if self.to_expression is QuantumExpression.CIRCUIT:
+            return self.__injected_sourcecode_path + ".png"
+
+        return self.draw_latex(latex=stdout)
+
+    async def run_subprocess(self) -> (str, str):
+        """run generated script's subprocess
+
+        Returns:
+            (str, str): subprocess's stdout and stderr
+        """
         proc = await asyncio.create_subprocess_exec(
             sys.executable,
             self.__injected_sourcecode_path,
@@ -172,25 +207,21 @@ class ConverterWorker:
         stdout, stderr = await proc.communicate()
 
         await proc.wait()
-        output: str = ""
+        return (stdout.decode(), stderr.decode())
 
-        if stdout:
-            output = stdout.decode()
-            print(f"output {output}")
-        if stderr:
-            print(f"error {stderr.decode()}")
-        print("end at ")
-        print(datetime.datetime.now().time())
+    def cleanup(self) -> bool:
+        """remove generated script
 
-        # remove injected source code
-        os.remove(self.__injected_sourcecode_path)
+        Returns:
+            bool: result of removing file
+        """
+        try:
+            os.remove(self.__injected_sourcecode_path)
+        except FileNotFoundError:
+            return False
+        return True
 
-        if self.to_expression is QuantumExpression.CIRCUIT:
-            return self.__injected_sourcecode_path + ".png"
-
-        return self.draw_latex(latex=output)
-
-    def draw_latex(self, latex: str) -> str:
+    def draw_latex(self, latex: str) -> str:  # pragma: no cover
         """
         render latex to image and save as file.
 

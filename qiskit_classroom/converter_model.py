@@ -59,7 +59,7 @@ class ConverterModel:
         return self.__to_expression
 
     @to_expression.setter
-    def to_experssion(self, value: QuantumExpression) -> None:
+    def to_expression(self, value: QuantumExpression) -> None:
         # cannot converte from matrix to dirac dicrectly
         if (
             value is QuantumExpression.DIRAC
@@ -68,7 +68,7 @@ class ConverterModel:
             raise ConvertingRuleException()
 
         self.__to_expression = value
-        print(f"to exression changed to {value}")
+        print(f"to expression changed to {value}")
 
     @property
     def result_img_path(self) -> str:
@@ -122,7 +122,7 @@ class ConverterModel:
 
         worker = ConverterWorker(
             self.from_expression,
-            self.to_experssion,
+            self.to_expression,
             self.input_data,
             self.expression_text,
         )

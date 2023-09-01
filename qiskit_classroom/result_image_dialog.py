@@ -38,6 +38,7 @@ class ResultImageDialog(QDialog):
         self.image_label.setPixmap(img)
         # resize dialog by image size
         self.resize(img.width() + 100, img.height() + 150)
+        self.image_label.show()
         self.show()
 
     def hideEvent(self, event) -> None:  # pylint: disable=invalid-name
