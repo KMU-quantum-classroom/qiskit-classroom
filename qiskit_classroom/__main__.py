@@ -1,6 +1,24 @@
 """
 entry point for gui application
 """
+
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+
 import sys
 import asyncio
 import functools
@@ -14,6 +32,13 @@ from qiskit_classroom import QISKIT_CLASSROOM_CONVERTER_VERSION_STR
 # pylint: disable=wrong-import-order
 import qasync
 from qasync import QApplication
+
+__app_name__ = "Qiskit-Classroom"
+__author__ = "KMU-quantum-classroom"
+__license__ = "Apache License"
+__copyright__ = "2023 " + __author__
+__version__ = "0.0.1"
+__email__ = "jinseok1001@outlook.com"
 
 
 def move_center(window: QMainWindow):
@@ -29,9 +54,9 @@ def move_center(window: QMainWindow):
     window.move(frame.topLeft())
 
 
-async def main():
+async def async_main():
     """
-    main for app
+    async main for app
     """
 
     def close_future(future: asyncio.Future, loop):
@@ -70,20 +95,25 @@ async def main():
     return True
 
 
-if __name__ == "__main__":
+def main():
+    """main for app"""
     if sys.version_info.major == 3 and sys.version_info.minor == 11:
         # this code run on 3.11
         # pylint: disable=protected-access
         with qasync._set_event_loop_policy(qasync.DefaultQEventLoopPolicy()):
             runner = asyncio.runners.Runner()
             try:
-                runner.run(main())
+                runner.run(async_main())
             except asyncio.exceptions.CancelledError:
                 sys.exit(0)
             finally:
                 runner.close()
     else:
         try:
-            qasync.run(main())
+            qasync.run(async_main())
         except asyncio.exceptions.CancelledError:
             sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
