@@ -1,0 +1,1 @@
+pdoc ./qiskit_classroom -o ./docs
