@@ -1,10 +1,10 @@
 # Qiskit-Classroom
 
-Qiskit-classroom is a toolkit that helps implement quantum algorithms by converting and visualizing different expressions used in the Qiskit escosystem using Qiskit-classroom-converter. The following three transformations are supported
+Qiskit-classroom is a toolkit that helps implement quantum algorithms by converting and visualizing different expressions used in the Qiskit ecosystem using Qiskit-classroom-converter. The following three transformations are supported
 
 * Quantum Circuit to Dirac notation
 
-* Quantum Circuit to Matirx
+* Quantum Circuit to Matrix
 
 * Matrix to Quantum Circuit
 
@@ -12,11 +12,11 @@ Qiskit-classroom is a toolkit that helps implement quantum algorithms by convert
 
 ### Prerequisites
 
-* LaTeX distribution(or program) must be installed
+* LaTeX's distribution(or program) must be installed
 
   * On GNU/Linux recommend TeX Live
 
-  * On Windows recomend MiKTeX
+  * On Windows recommend MiKTeX
 
 * git should be installed
 
@@ -26,19 +26,21 @@ Qiskit-classroom is a toolkit that helps implement quantum algorithms by convert
 
 ### Install with Flatpak (GNU/Linux)
 
-We currently packaging flatpak package. please wait for a couple of days
+We're currently packaging flatpak package. please wait for a couple of days
 
-### Install with PyPi (Windows, MacOS)
+### Install with PyPi (Windows, macOS)
 
-We currently packaging python package. please wait for a couple of days.
+```
+pip install qiskit-classroom
+```
 
 > warning
 >
-> Apple silicon Processor not supported read this article
+> Apple Silicon Processor not supported read this article
 
 you must install latex distribution(program).
 
-## How to Debugging
+## How to debug
 
 ```bash
 # download package
