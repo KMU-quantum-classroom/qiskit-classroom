@@ -164,20 +164,41 @@ class ConverterWorker:
         Returns:
             str: visualization code
         """
-        if self.to_expression is QuantumExpression.MATRIX:
-            return add_new_line(["print(result['result'])"])
+        if self.to_expression is not self.from_expression:
+            if self.to_expression is QuantumExpression.MATRIX:
+                return add_new_line(
+                    [
+                        "for gate, name in zip(result['gate'], result['name']):",
+                        "\tprint(f'{gate.strip()}_{{{name}}}')",
+                    ]
+                )
 
-        if self.to_expression is QuantumExpression.CIRCUIT:
-            return add_new_line(
-                [
-                    'quantum_circuit.draw(output="mpl")'
-                    + f'.savefig("{self.__injected_sourcecode_path+".png"}", '
-                    + 'bbox_inches="tight")'
-                ]
-            )
+            if self.to_expression is QuantumExpression.CIRCUIT:
+                return add_new_line(
+                    [
+                        'quantum_circuit.draw(output="mpl")'
+                        + f'.savefig("{self.__injected_sourcecode_path+".png"}", '
+                        + 'bbox_inches="tight")'
+                    ]
+                )
 
-        if self.to_expression is QuantumExpression.DIRAC:
-            return add_new_line(["print(result)"])
+            if self.to_expression is QuantumExpression.DIRAC:
+                return add_new_line(["print(result)"])
+        else:
+            if self.to_expression is QuantumExpression.MATRIX:
+                matrix_input: MatrixInput = self.input_data
+                return add_new_line(
+                    [f"print(array_to_latex({matrix_input.value_name}, source=True))"]
+                )
+            elif self.to_expression is QuantumExpression.CIRCUIT:
+                qunatum_input: QuantumCircuitInput = self.input_data
+                return add_new_line(
+                    [
+                        f'{qunatum_input.value_name}.draw(output="mpl")'
+                        + f'.savefig("{self.__injected_sourcecode_path+".png"}",'
+                        + 'bbox_inches="tight")'
+                    ]
+                )
         return ""
 
     async def run(self) -> str:
