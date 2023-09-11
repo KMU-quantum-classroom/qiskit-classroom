@@ -30,9 +30,9 @@ import matplotlib.pyplot as plt
 from .expression_enum import QuantumExpression
 from .input_model import Input, QuantumCircuitInput, MatrixInput
 
-mpl.rcParams["font.size"] = 12
+mpl.rcParams["font.size"] = 9
 mpl.rcParams["text.usetex"] = True
-mpl.rcParams["text.latex.preamble"] = r"\usepackage{{amsmath}}\usepackage{{qcircuit}}"
+mpl.rcParams["text.latex.preamble"] = r"\usepackage{{amsmath}}"
 
 ARRAY_TO_LATEX_IMPORT = "from qiskit.visualization import array_to_latex"
 CONVERTER_IMPORT = "from qiskit_class_converter import ConversionService"
@@ -279,6 +279,6 @@ class ConverterWorker:
         fig = plt.figure()
         fig.text(0, 0, f"${latex}$")
         output = self.__injected_sourcecode_path + ".png"
-        fig.savefig(output, dpi=300, bbox_inches="tight")
+        fig.savefig(output, dpi=200, bbox_inches="tight")
         plt.close()
         return output
