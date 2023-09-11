@@ -22,6 +22,8 @@ entry point for gui application
 import sys
 import asyncio
 import functools
+
+# pylint: disable=no-name-in-module
 from PySide6.QtWidgets import QMainWindow, QStatusBar
 from qiskit_classroom.converter_view import ConverterView
 from qiskit_classroom.converter_model import ConverterModel
@@ -101,6 +103,7 @@ def main():
         # this code run on 3.11
         # pylint: disable=protected-access
         with qasync._set_event_loop_policy(qasync.DefaultQEventLoopPolicy()):
+            # pylint: disable=no-member
             runner = asyncio.runners.Runner()
             try:
                 runner.run(async_main())

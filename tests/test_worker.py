@@ -42,7 +42,8 @@ QC_TO_MATRIX_EXPECTED = [
     "converter = ConversionService(conversion_type='QC_TO_MATRIX',"
     + " option={'print': 'raw'})\n"
     + f"result = converter.convert(input_value={VALUE_NAME})",
-    """print(result['result'])""",
+    "for gate, name in zip(result['gate'], result['name']):\n"
+    + "\tprint(f'{gate.strip()}_{{{name}}}')",
 ]
 
 MATRIX_TO_QC_EXPECTED = [
@@ -144,6 +145,23 @@ class ConverterWorkerTest(unittest.IsolatedAsyncioTestCase):
         worker.to_expression = QuantumExpression.NONE
 
         self.assertEqual(worker.generate_visualization_code(), "")
+
+        worker.to_expression = QuantumExpression.CIRCUIT
+        worker.input_data = QuantumCircuitInput(VALUE_NAME)
+
+        self.assertEqual(
+            worker.generate_visualization_code(),
+            f'{VALUE_NAME}.draw(output="mpl")'
+            + f'.savefig("{RANDOM_FILE_NAME + ".png"}",'
+            + 'bbox_inches="tight")',
+        )
+        worker.from_expression = QuantumExpression.MATRIX
+        worker.to_expression = QuantumExpression.MATRIX
+        worker.input_data: MatrixInput = MatrixInput(2, True)
+        self.assertEqual(
+            worker.generate_visualization_code(),
+            f"print(array_to_latex({worker.input_data.value_name}, source=True))",
+        )
 
     async def test_run_quantum_circuit_to_matrix(self):
         """test run method"""

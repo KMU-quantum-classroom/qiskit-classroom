@@ -190,7 +190,7 @@ class ConverterWorker:
                 return add_new_line(
                     [f"print(array_to_latex({matrix_input.value_name}, source=True))"]
                 )
-            elif self.to_expression is QuantumExpression.CIRCUIT:
+            if self.to_expression is QuantumExpression.CIRCUIT:
                 qunatum_input: QuantumCircuitInput = self.input_data
                 return add_new_line(
                     [
