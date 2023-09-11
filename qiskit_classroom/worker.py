@@ -30,9 +30,9 @@ import matplotlib.pyplot as plt
 from .expression_enum import QuantumExpression
 from .input_model import Input, QuantumCircuitInput, MatrixInput
 
-mpl.rcParams["font.size"] = 12
+mpl.rcParams["font.size"] = 9
 mpl.rcParams["text.usetex"] = True
-mpl.rcParams["text.latex.preamble"] = r"\usepackage{{amsmath}}\usepackage{{qcircuit}}"
+mpl.rcParams["text.latex.preamble"] = r"\usepackage{{amsmath}}"
 
 ARRAY_TO_LATEX_IMPORT = "from qiskit.visualization import array_to_latex"
 CONVERTER_IMPORT = "from qiskit_class_converter import ConversionService"
@@ -164,20 +164,41 @@ class ConverterWorker:
         Returns:
             str: visualization code
         """
-        if self.to_expression is QuantumExpression.MATRIX:
-            return add_new_line(["print(result['result'])"])
+        if self.to_expression is not self.from_expression:
+            if self.to_expression is QuantumExpression.MATRIX:
+                return add_new_line(
+                    [
+                        "for gate, name in zip(result['gate'], result['name']):",
+                        "\tprint(f'{gate.strip()}_{{{name}}}')",
+                    ]
+                )
 
-        if self.to_expression is QuantumExpression.CIRCUIT:
-            return add_new_line(
-                [
-                    'quantum_circuit.draw(output="mpl")'
-                    + f'.savefig("{self.__injected_sourcecode_path+".png"}", '
-                    + 'bbox_inches="tight")'
-                ]
-            )
+            if self.to_expression is QuantumExpression.CIRCUIT:
+                return add_new_line(
+                    [
+                        'quantum_circuit.draw(output="mpl")'
+                        + f'.savefig("{self.__injected_sourcecode_path+".png"}", '
+                        + 'bbox_inches="tight")'
+                    ]
+                )
 
-        if self.to_expression is QuantumExpression.DIRAC:
-            return add_new_line(["print(result)"])
+            if self.to_expression is QuantumExpression.DIRAC:
+                return add_new_line(["print(result)"])
+        else:
+            if self.to_expression is QuantumExpression.MATRIX:
+                matrix_input: MatrixInput = self.input_data
+                return add_new_line(
+                    [f"print(array_to_latex({matrix_input.value_name}, source=True))"]
+                )
+            if self.to_expression is QuantumExpression.CIRCUIT:
+                qunatum_input: QuantumCircuitInput = self.input_data
+                return add_new_line(
+                    [
+                        f'{qunatum_input.value_name}.draw(output="mpl")'
+                        + f'.savefig("{self.__injected_sourcecode_path+".png"}",'
+                        + 'bbox_inches="tight")'
+                    ]
+                )
         return ""
 
     async def run(self) -> str:
@@ -258,6 +279,6 @@ class ConverterWorker:
         fig = plt.figure()
         fig.text(0, 0, f"${latex}$")
         output = self.__injected_sourcecode_path + ".png"
-        fig.savefig(output, dpi=300, bbox_inches="tight")
+        fig.savefig(output, dpi=200, bbox_inches="tight")
         plt.close()
         return output
