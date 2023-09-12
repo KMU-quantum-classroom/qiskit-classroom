@@ -37,9 +37,10 @@ expressions: list[str] = [expression.name for expression in QuantumExpression]
 Converting_method: dict[QuantumExpression, list[QuantumExpression]] = {
     QuantumExpression.NONE: [QuantumExpression.NONE],
     QuantumExpression.CIRCUIT: [
+        QuantumExpression.CIRCUIT,
         QuantumExpression.DIRAC,
         QuantumExpression.MATRIX,
     ],
-    QuantumExpression.MATRIX: [QuantumExpression.CIRCUIT],
+    QuantumExpression.MATRIX: [QuantumExpression.MATRIX, QuantumExpression.CIRCUIT],
     QuantumExpression.DIRAC: [QuantumExpression.MATRIX],
 }

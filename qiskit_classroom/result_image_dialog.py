@@ -19,8 +19,17 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+import shutil
+
 # pylint: disable=no-name-in-module
-from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QLabel
+from PySide6.QtWidgets import (
+    QDialog,
+    QPushButton,
+    QVBoxLayout,
+    QLabel,
+    QFileDialog,
+    QHBoxLayout,
+)
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap
 
@@ -32,6 +41,7 @@ class ResultImageDialog(QDialog):
 
     def __init__(self, parent) -> None:
         super().__init__(parent)
+        self.image_path: str = ""
         self.setWindowTitle("Result Image")
         self.setMinimumWidth(300)
         self.setMinimumHeight(200)
@@ -41,9 +51,22 @@ class ResultImageDialog(QDialog):
         self.image_label = QLabel()
         vbox.addWidget(self.image_label)
 
+        hbox = QHBoxLayout(self)
+
         self.close_button = QPushButton("close")
         self.close_button.clicked.connect(self.close)
-        vbox.addWidget(self.close_button)
+        hbox.addWidget(self.close_button)
+
+        self.save_image = QPushButton("Save image")
+        self.save_image.clicked.connect(self.on_save_image_clicked)
+        hbox.addWidget(self.save_image)
+
+        vbox.addLayout(hbox)
+
+    def on_save_image_clicked(self) -> None:
+        """copy converted image"""
+        (path, _) = QFileDialog.getSaveFileName(self, "Image save", "", "Image (*.png)")
+        shutil.copyfile(self.image_path, path)
 
     def show_image(self, image_path: str) -> None:
         """show image
@@ -51,6 +74,7 @@ class ResultImageDialog(QDialog):
         Args:
             image_path (str): image path
         """
+        self.image_path = image_path
         img = QPixmap(image_path)
         self.image_label.setPixmap(img)
         # resize dialog by image size

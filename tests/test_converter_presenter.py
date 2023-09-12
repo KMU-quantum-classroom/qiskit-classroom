@@ -65,7 +65,7 @@ class ConverterPresenterTest(unittest.IsolatedAsyncioTestCase):
         )
         self.presenter.on_from_combo_changed()
         self.assertEqual(self.model.from_expression, QuantumExpression.CIRCUIT)
-        self.assertEqual(self.model.to_expression, QuantumExpression.DIRAC)
+        self.assertEqual(self.model.to_expression, QuantumExpression.CIRCUIT)
 
         self.view.get_from_expression = mock.Mock(
             return_value=QuantumExpression.DIRAC.name
@@ -81,7 +81,7 @@ class ConverterPresenterTest(unittest.IsolatedAsyncioTestCase):
 
         self.presenter.on_from_combo_changed()
 
-        self.assertEqual(self.model.to_expression, QuantumExpression.CIRCUIT)
+        self.assertEqual(self.model.to_expression, QuantumExpression.MATRIX)
 
     def test_on_to_combo_changed(self) -> None:
         """test on combo changed"""
