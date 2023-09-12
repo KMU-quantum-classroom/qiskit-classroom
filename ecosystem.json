@@ -4,6 +4,6 @@
         "requirements-dev.txt"
     ],
     "debian_dependencies": [
-        "jq"
+        "libgles2-mesa-dev"
     ]
 }
