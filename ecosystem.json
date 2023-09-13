@@ -1,0 +1,9 @@
+{
+    "dependencies_files": [
+        "requirements.txt",
+        "requirements-dev.txt"
+    ],
+    "debian_dependencies": [
+        "libgles2-mesa-dev"
+    ]
+}
