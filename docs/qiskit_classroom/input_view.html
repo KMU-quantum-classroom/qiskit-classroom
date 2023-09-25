@@ -353,7 +353,7 @@
 </span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a>        <span class="n">vbox</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>        <span class="n">vbox</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignmentFlag</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
 </span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>
-</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>        <span class="n">hbox</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>        <span class="n">hbox</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
 </span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>        <span class="n">num_cubit_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;number of cubit&quot;</span><span class="p">)</span>
 </span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">num_cubit_text</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">num_cubit_text</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s2">&quot;input 3 digits number&quot;</span><span class="p">)</span>
@@ -715,15 +715,15 @@ Methods:
                 <dd id="ExpressionPlainText.zoomInF" class="function">zoomInF</dd>
                 <dd id="ExpressionPlainText.zoomOut" class="function">zoomOut</dd>
                 <dd id="ExpressionPlainText.LineWrapMode" class="class">LineWrapMode</dd>
-                <dd id="ExpressionPlainText.textChanged" class="function">textChanged</dd>
-                <dd id="ExpressionPlainText.blockCountChanged" class="function">blockCountChanged</dd>
-                <dd id="ExpressionPlainText.undoAvailable" class="function">undoAvailable</dd>
                 <dd id="ExpressionPlainText.selectionChanged" class="function">selectionChanged</dd>
+                <dd id="ExpressionPlainText.undoAvailable" class="function">undoAvailable</dd>
+                <dd id="ExpressionPlainText.modificationChanged" class="function">modificationChanged</dd>
                 <dd id="ExpressionPlainText.copyAvailable" class="function">copyAvailable</dd>
+                <dd id="ExpressionPlainText.redoAvailable" class="function">redoAvailable</dd>
+                <dd id="ExpressionPlainText.blockCountChanged" class="function">blockCountChanged</dd>
+                <dd id="ExpressionPlainText.textChanged" class="function">textChanged</dd>
                 <dd id="ExpressionPlainText.cursorPositionChanged" class="function">cursorPositionChanged</dd>
                 <dd id="ExpressionPlainText.updateRequest" class="function">updateRequest</dd>
-                <dd id="ExpressionPlainText.modificationChanged" class="function">modificationChanged</dd>
-                <dd id="ExpressionPlainText.redoAvailable" class="function">redoAvailable</dd>
 
             </div>
             <div><dt>PySide6.QtWidgets.QAbstractScrollArea</dt>
@@ -1014,10 +1014,10 @@ Methods:
                 <dd id="ExpressionPlainText.x" class="function">x</dd>
                 <dd id="ExpressionPlainText.y" class="function">y</dd>
                 <dd id="ExpressionPlainText.RenderFlag" class="class">RenderFlag</dd>
-                <dd id="ExpressionPlainText.customContextMenuRequested" class="function">customContextMenuRequested</dd>
-                <dd id="ExpressionPlainText.windowIconChanged" class="function">windowIconChanged</dd>
                 <dd id="ExpressionPlainText.windowIconTextChanged" class="function">windowIconTextChanged</dd>
+                <dd id="ExpressionPlainText.windowIconChanged" class="function">windowIconChanged</dd>
                 <dd id="ExpressionPlainText.windowTitleChanged" class="function">windowTitleChanged</dd>
+                <dd id="ExpressionPlainText.customContextMenuRequested" class="function">customContextMenuRequested</dd>
 
             </div>
             <div><dt>PySide6.QtCore.QObject</dt>
@@ -1058,8 +1058,8 @@ Methods:
                 <dd id="ExpressionPlainText.startTimer" class="function">startTimer</dd>
                 <dd id="ExpressionPlainText.thread" class="function">thread</dd>
                 <dd id="ExpressionPlainText.tr" class="function">tr</dd>
-                <dd id="ExpressionPlainText.objectNameChanged" class="function">objectNameChanged</dd>
                 <dd id="ExpressionPlainText.destroyed" class="function">destroyed</dd>
+                <dd id="ExpressionPlainText.objectNameChanged" class="function">objectNameChanged</dd>
 
             </div>
             <div><dt>PySide6.QtGui.QPaintDevice</dt>
@@ -1443,10 +1443,10 @@ Methods:
                 <dd id="InputWidget.x" class="function">x</dd>
                 <dd id="InputWidget.y" class="function">y</dd>
                 <dd id="InputWidget.RenderFlag" class="class">RenderFlag</dd>
-                <dd id="InputWidget.customContextMenuRequested" class="function">customContextMenuRequested</dd>
-                <dd id="InputWidget.windowIconChanged" class="function">windowIconChanged</dd>
                 <dd id="InputWidget.windowIconTextChanged" class="function">windowIconTextChanged</dd>
+                <dd id="InputWidget.windowIconChanged" class="function">windowIconChanged</dd>
                 <dd id="InputWidget.windowTitleChanged" class="function">windowTitleChanged</dd>
+                <dd id="InputWidget.customContextMenuRequested" class="function">customContextMenuRequested</dd>
 
             </div>
             <div><dt>PySide6.QtCore.QObject</dt>
@@ -1489,8 +1489,8 @@ Methods:
                 <dd id="InputWidget.thread" class="function">thread</dd>
                 <dd id="InputWidget.timerEvent" class="function">timerEvent</dd>
                 <dd id="InputWidget.tr" class="function">tr</dd>
-                <dd id="InputWidget.objectNameChanged" class="function">objectNameChanged</dd>
                 <dd id="InputWidget.destroyed" class="function">destroyed</dd>
+                <dd id="InputWidget.objectNameChanged" class="function">objectNameChanged</dd>
 
             </div>
             <div><dt>PySide6.QtGui.QPaintDevice</dt>
@@ -1988,10 +1988,10 @@ Methods:
                 <dd id="QuantumCircuitInputWidget.x" class="function">x</dd>
                 <dd id="QuantumCircuitInputWidget.y" class="function">y</dd>
                 <dd id="QuantumCircuitInputWidget.RenderFlag" class="class">RenderFlag</dd>
-                <dd id="QuantumCircuitInputWidget.customContextMenuRequested" class="function">customContextMenuRequested</dd>
-                <dd id="QuantumCircuitInputWidget.windowIconChanged" class="function">windowIconChanged</dd>
                 <dd id="QuantumCircuitInputWidget.windowIconTextChanged" class="function">windowIconTextChanged</dd>
+                <dd id="QuantumCircuitInputWidget.windowIconChanged" class="function">windowIconChanged</dd>
                 <dd id="QuantumCircuitInputWidget.windowTitleChanged" class="function">windowTitleChanged</dd>
+                <dd id="QuantumCircuitInputWidget.customContextMenuRequested" class="function">customContextMenuRequested</dd>
 
             </div>
             <div><dt>PySide6.QtCore.QObject</dt>
@@ -2034,8 +2034,8 @@ Methods:
                 <dd id="QuantumCircuitInputWidget.thread" class="function">thread</dd>
                 <dd id="QuantumCircuitInputWidget.timerEvent" class="function">timerEvent</dd>
                 <dd id="QuantumCircuitInputWidget.tr" class="function">tr</dd>
-                <dd id="QuantumCircuitInputWidget.objectNameChanged" class="function">objectNameChanged</dd>
                 <dd id="QuantumCircuitInputWidget.destroyed" class="function">destroyed</dd>
+                <dd id="QuantumCircuitInputWidget.objectNameChanged" class="function">objectNameChanged</dd>
 
             </div>
             <div><dt>PySide6.QtGui.QPaintDevice</dt>
@@ -2415,10 +2415,10 @@ Methods:
                 <dd id="DiracInputWidget.x" class="function">x</dd>
                 <dd id="DiracInputWidget.y" class="function">y</dd>
                 <dd id="DiracInputWidget.RenderFlag" class="class">RenderFlag</dd>
-                <dd id="DiracInputWidget.customContextMenuRequested" class="function">customContextMenuRequested</dd>
-                <dd id="DiracInputWidget.windowIconChanged" class="function">windowIconChanged</dd>
                 <dd id="DiracInputWidget.windowIconTextChanged" class="function">windowIconTextChanged</dd>
+                <dd id="DiracInputWidget.windowIconChanged" class="function">windowIconChanged</dd>
                 <dd id="DiracInputWidget.windowTitleChanged" class="function">windowTitleChanged</dd>
+                <dd id="DiracInputWidget.customContextMenuRequested" class="function">customContextMenuRequested</dd>
 
             </div>
             <div><dt>PySide6.QtCore.QObject</dt>
@@ -2461,8 +2461,8 @@ Methods:
                 <dd id="DiracInputWidget.thread" class="function">thread</dd>
                 <dd id="DiracInputWidget.timerEvent" class="function">timerEvent</dd>
                 <dd id="DiracInputWidget.tr" class="function">tr</dd>
-                <dd id="DiracInputWidget.objectNameChanged" class="function">objectNameChanged</dd>
                 <dd id="DiracInputWidget.destroyed" class="function">destroyed</dd>
+                <dd id="DiracInputWidget.objectNameChanged" class="function">objectNameChanged</dd>
 
             </div>
             <div><dt>PySide6.QtGui.QPaintDevice</dt>
@@ -2511,7 +2511,7 @@ Methods:
 </span><span id="MatrixInputWidget-188"><a href="#MatrixInputWidget-188"><span class="linenos">188</span></a>        <span class="n">vbox</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="MatrixInputWidget-189"><a href="#MatrixInputWidget-189"><span class="linenos">189</span></a>        <span class="n">vbox</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignmentFlag</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
 </span><span id="MatrixInputWidget-190"><a href="#MatrixInputWidget-190"><span class="linenos">190</span></a>
-</span><span id="MatrixInputWidget-191"><a href="#MatrixInputWidget-191"><span class="linenos">191</span></a>        <span class="n">hbox</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span id="MatrixInputWidget-191"><a href="#MatrixInputWidget-191"><span class="linenos">191</span></a>        <span class="n">hbox</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
 </span><span id="MatrixInputWidget-192"><a href="#MatrixInputWidget-192"><span class="linenos">192</span></a>        <span class="n">num_cubit_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;number of cubit&quot;</span><span class="p">)</span>
 </span><span id="MatrixInputWidget-193"><a href="#MatrixInputWidget-193"><span class="linenos">193</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">num_cubit_text</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="MatrixInputWidget-194"><a href="#MatrixInputWidget-194"><span class="linenos">194</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">num_cubit_text</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s2">&quot;input 3 digits number&quot;</span><span class="p">)</span>
@@ -2605,7 +2605,7 @@ Methods:
 </span><span id="MatrixInputWidget.set_ui-188"><a href="#MatrixInputWidget.set_ui-188"><span class="linenos">188</span></a>        <span class="n">vbox</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="MatrixInputWidget.set_ui-189"><a href="#MatrixInputWidget.set_ui-189"><span class="linenos">189</span></a>        <span class="n">vbox</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignmentFlag</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
 </span><span id="MatrixInputWidget.set_ui-190"><a href="#MatrixInputWidget.set_ui-190"><span class="linenos">190</span></a>
-</span><span id="MatrixInputWidget.set_ui-191"><a href="#MatrixInputWidget.set_ui-191"><span class="linenos">191</span></a>        <span class="n">hbox</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span id="MatrixInputWidget.set_ui-191"><a href="#MatrixInputWidget.set_ui-191"><span class="linenos">191</span></a>        <span class="n">hbox</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
 </span><span id="MatrixInputWidget.set_ui-192"><a href="#MatrixInputWidget.set_ui-192"><span class="linenos">192</span></a>        <span class="n">num_cubit_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;number of cubit&quot;</span><span class="p">)</span>
 </span><span id="MatrixInputWidget.set_ui-193"><a href="#MatrixInputWidget.set_ui-193"><span class="linenos">193</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">num_cubit_text</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="MatrixInputWidget.set_ui-194"><a href="#MatrixInputWidget.set_ui-194"><span class="linenos">194</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">num_cubit_text</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s2">&quot;input 3 digits number&quot;</span><span class="p">)</span>
@@ -2929,10 +2929,10 @@ Methods:
                 <dd id="MatrixInputWidget.x" class="function">x</dd>
                 <dd id="MatrixInputWidget.y" class="function">y</dd>
                 <dd id="MatrixInputWidget.RenderFlag" class="class">RenderFlag</dd>
-                <dd id="MatrixInputWidget.customContextMenuRequested" class="function">customContextMenuRequested</dd>
-                <dd id="MatrixInputWidget.windowIconChanged" class="function">windowIconChanged</dd>
                 <dd id="MatrixInputWidget.windowIconTextChanged" class="function">windowIconTextChanged</dd>
+                <dd id="MatrixInputWidget.windowIconChanged" class="function">windowIconChanged</dd>
                 <dd id="MatrixInputWidget.windowTitleChanged" class="function">windowTitleChanged</dd>
+                <dd id="MatrixInputWidget.customContextMenuRequested" class="function">customContextMenuRequested</dd>
 
             </div>
             <div><dt>PySide6.QtCore.QObject</dt>
@@ -2975,8 +2975,8 @@ Methods:
                 <dd id="MatrixInputWidget.thread" class="function">thread</dd>
                 <dd id="MatrixInputWidget.timerEvent" class="function">timerEvent</dd>
                 <dd id="MatrixInputWidget.tr" class="function">tr</dd>
-                <dd id="MatrixInputWidget.objectNameChanged" class="function">objectNameChanged</dd>
                 <dd id="MatrixInputWidget.destroyed" class="function">destroyed</dd>
+                <dd id="MatrixInputWidget.objectNameChanged" class="function">objectNameChanged</dd>
 
             </div>
             <div><dt>PySide6.QtGui.QPaintDevice</dt>
