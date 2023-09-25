@@ -133,7 +133,9 @@ class ConverterPresenter:
         self.model.input_data = input_data
 
         try:
-            result = await self.model.convert_and_draw()
+            result = await self.model.convert_and_draw(
+                shows_result=self.view.get_shows_result()
+            )
         except RuntimeError:
             self.view.show_alert_message("conversion processe error")
         except TimeoutExpired:
@@ -142,6 +144,10 @@ class ConverterPresenter:
             self.view.show_alert_message("set file valid one")
         except AttributeError:
             self.view.show_alert_message("set input value")
+        except SyntaxError:
+            self.view.show_alert_message("syntax error with your code or expression")
+        except NameError:
+            self.view.show_alert_message("value_name or some value name not defined")
         finally:
             self.view.close_progress_bar()
 

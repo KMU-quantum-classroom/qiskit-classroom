@@ -187,7 +187,7 @@ class MatrixInputWidget(InputWidget):
         vbox = QVBoxLayout(self)
         vbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        hbox = QHBoxLayout(self)
+        hbox = QHBoxLayout()
         num_cubit_label = QLabel("number of cubit")
         self.num_cubit_text = QLineEdit(self)
         self.num_cubit_text.setToolTip("input 3 digits number")
