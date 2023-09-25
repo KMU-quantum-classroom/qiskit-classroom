@@ -42,8 +42,8 @@ QC_TO_MATRIX_EXPECTED = [
     "converter = ConversionService(conversion_type='QC_TO_MATRIX',"
     + " option={'print': 'raw'})\n"
     + f"result = converter.convert(input_value={VALUE_NAME})",
-    "for gate, name in zip(result['gate'], result['name']):\n"
-    + "\tprint(f'{gate.strip()}_{{{name}}}')",
+    "for gate, name in zip(reversed(result['gate']), reversed(result['name'])):\n"
+    + "\tprint(f'{gate.strip()}_' + '{' + \"\\\\otimes \".join(name[1]) + '}')\n",
 ]
 
 MATRIX_TO_QC_EXPECTED = [
@@ -81,6 +81,7 @@ class ConverterWorkerTest(unittest.IsolatedAsyncioTestCase):
             QuantumExpression.MATRIX,
             self.quantum_circuit_input,
             QUANTUM_CIRCUIT_CODE,
+            False,
         )
 
         self.assertEqual(worker.generate_conversion_code(), QC_TO_MATRIX_EXPECTED[0])
@@ -94,6 +95,7 @@ class ConverterWorkerTest(unittest.IsolatedAsyncioTestCase):
             QuantumExpression.MATRIX,
             self.quantum_circuit_input,
             QUANTUM_CIRCUIT_CODE,
+            False,
         )
 
         self.assertEqual(worker.generate_visualization_code(), QC_TO_MATRIX_EXPECTED[1])
@@ -107,6 +109,7 @@ class ConverterWorkerTest(unittest.IsolatedAsyncioTestCase):
             QuantumExpression.CIRCUIT,
             self.matrix_input,
             MATRIX_CODE,
+            False,
         )
 
         self.assertEqual(worker.generate_conversion_code(), MATRIX_TO_QC_EXPECTED[0])
@@ -120,6 +123,7 @@ class ConverterWorkerTest(unittest.IsolatedAsyncioTestCase):
             QuantumExpression.CIRCUIT,
             self.matrix_input,
             MATRIX_CODE,
+            False,
         )
 
         self.assertEqual(worker.generate_visualization_code(), MATRIX_TO_QC_EXPECTED[1])
@@ -129,7 +133,7 @@ class ConverterWorkerTest(unittest.IsolatedAsyncioTestCase):
         test it return ""
         """
         worker = ConverterWorker(
-            QuantumExpression.MATRIX, QuantumExpression.MATRIX, None, ""
+            QuantumExpression.MATRIX, QuantumExpression.MATRIX, None, "", False
         )
         self.assertEqual(worker.generate_conversion_code(), "")
 
@@ -138,7 +142,7 @@ class ConverterWorkerTest(unittest.IsolatedAsyncioTestCase):
         test case returns ""
         """
         worker = ConverterWorker(
-            QuantumExpression.CIRCUIT, QuantumExpression.DIRAC, None, ""
+            QuantumExpression.CIRCUIT, QuantumExpression.DIRAC, None, "", False
         )
         self.assertEqual(worker.generate_visualization_code(), "print(result)")
 
@@ -171,6 +175,7 @@ class ConverterWorkerTest(unittest.IsolatedAsyncioTestCase):
             QuantumExpression.MATRIX,
             self.quantum_circuit_input,
             QUANTUM_CIRCUIT_CODE,
+            False,
         )
         worker.run_subprocess = mock.AsyncMock(return_value=(" ", " "))
         worker.cleanup = mock.Mock(return_value=True)
@@ -188,6 +193,7 @@ class ConverterWorkerTest(unittest.IsolatedAsyncioTestCase):
             QuantumExpression.CIRCUIT,
             self.matrix_input,
             MATRIX_CODE,
+            False,
         )
         worker.run_subprocess = mock.AsyncMock(return_value=(" ", " "))
         worker.cleanup = mock.Mock(return_value=True)

@@ -51,7 +51,7 @@ class ResultImageDialog(QDialog):
         self.image_label = QLabel()
         vbox.addWidget(self.image_label)
 
-        hbox = QHBoxLayout(self)
+        hbox = QHBoxLayout()
 
         self.close_button = QPushButton("close")
         self.close_button.clicked.connect(self.close)

@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
     QPushButton,
     QMessageBox,
     QProgressDialog,
+    QCheckBox,
 )
 
 
@@ -113,6 +114,9 @@ class ConverterView(QWidget):
                 input_widget.file_imported.connect(self.__on_file_imported)
             vbox.addWidget(input_widget)
             input_widget.hide()
+
+        self.shows_results = QCheckBox("let result state show?")
+        vbox.addWidget(self.shows_results)
 
         vbox.addWidget(self.convert_button)
         vbox.addSpacing(50)
@@ -263,6 +267,15 @@ class ConverterView(QWidget):
         """
         self.to_combo.clear()
         self.to_combo.addItems(items)
+
+    def get_shows_result(self) -> bool:
+        """return show_result checked
+
+        Returns:
+            bool: show_result
+        """
+
+        return self.shows_results.isChecked()
 
     def show_alert_message(self, message: str) -> None:
         """show alert message to user

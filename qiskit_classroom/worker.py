@@ -60,6 +60,7 @@ class ConverterWorker:
         to_expression: QuantumExpression,
         input_data: Input,
         expression_text: str,
+        shows_result: bool,
     ) -> None:
         self.from_expression = from_expression
         self.to_expression = to_expression
@@ -68,6 +69,7 @@ class ConverterWorker:
         # copy text
         self.expression_text = "" + expression_text
         self.input_data = input_data
+        self.shows_result = shows_result
 
     @staticmethod
     def generate_random_file_name() -> str:  # pragma: no cover
@@ -168,8 +170,11 @@ class ConverterWorker:
             if self.to_expression is QuantumExpression.MATRIX:
                 return add_new_line(
                     [
-                        "for gate, name in zip(result['gate'], result['name']):",
-                        "\tprint(f'{gate.strip()}_{{{name}}}')",
+                        "for gate, name in zip(reversed(result['gate']), reversed(result['name'])):",
+                        """\tprint(f'{gate.strip()}_' + '{' + "\\\\otimes ".join(name[1]) + '}')""",
+                        "print(f\"={result['result']}_{{result}}\")"
+                        if self.shows_result
+                        else "",
                     ]
                 )
 
@@ -218,6 +223,10 @@ class ConverterWorker:
         if stderr:
             stderr: str = stderr
             print(f"error {stderr}")
+            if stderr.find("SyntaxError") != -1:
+                raise SyntaxError
+            if stderr.find("NameError") != -1:
+                raise NameError
         print("end at ")
         print(datetime.datetime.now().time())
 

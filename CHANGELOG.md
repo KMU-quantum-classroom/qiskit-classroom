@@ -1,5 +1,16 @@
 # CHANGELOG.md
 
+## 0.2.0 (2023-09-25)
+
+Feature :
+* Add let result state show option
+
+
+Fix :
+* Fix QC to Matrix matrix order
+
+
+
 ## 0.1.0 (2023-09-12)
 
 Feature :

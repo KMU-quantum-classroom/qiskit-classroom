@@ -130,7 +130,7 @@ class ConverterModel:
         self.__expression_text = value
         print(f"expression_text change to {value}")
 
-    async def convert_and_draw(self) -> bool:
+    async def convert_and_draw(self, shows_result: bool) -> bool:
         """run worker to converting expression and visualizating expression
 
         Returns:
@@ -142,6 +142,7 @@ class ConverterModel:
             self.to_expression,
             self.input_data,
             self.expression_text,
+            shows_result=shows_result,
         )
         img_path = await worker.run()
 
