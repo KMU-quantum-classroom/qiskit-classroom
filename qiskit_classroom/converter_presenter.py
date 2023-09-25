@@ -133,7 +133,9 @@ class ConverterPresenter:
         self.model.input_data = input_data
 
         try:
-            result = await self.model.convert_and_draw()
+            result = await self.model.convert_and_draw(
+                shows_result=self.view.get_shows_result()
+            )
         except RuntimeError:
             self.view.show_alert_message("conversion processe error")
         except TimeoutExpired:
