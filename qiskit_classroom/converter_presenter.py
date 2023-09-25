@@ -142,6 +142,10 @@ class ConverterPresenter:
             self.view.show_alert_message("set file valid one")
         except AttributeError:
             self.view.show_alert_message("set input value")
+        except SyntaxError:
+            self.view.show_alert_message("syntax error with your code or expression")
+        except NameError:
+            self.view.show_alert_message("value_name or some value name not defined")
         finally:
             self.view.close_progress_bar()
 

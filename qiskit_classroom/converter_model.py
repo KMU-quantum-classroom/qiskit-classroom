@@ -142,6 +142,7 @@ class ConverterModel:
             self.to_expression,
             self.input_data,
             self.expression_text,
+            True,
         )
         img_path = await worker.run()
 
