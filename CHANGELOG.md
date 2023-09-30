@@ -1,5 +1,10 @@
 # CHANGELOG.md
 
+## 0.2.1 (2023-09-30)
+
+Fix :
+* Fix project meta data
+
 ## 0.2.0 (2023-09-25)
 
 Feature :
