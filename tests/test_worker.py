@@ -42,8 +42,9 @@ QC_TO_MATRIX_EXPECTED = [
     "converter = ConversionService(conversion_type='QC_TO_MATRIX',"
     + " option={'print': 'raw'})\n"
     + f"result = converter.convert(input_value={VALUE_NAME})",
-    "for gate, name in zip(reversed(result['gate']), reversed(result['name'])):\n"
-    + "\tprint(f'{gate.strip()}_' + '{' + \"\\\\otimes \".join(name[1]) + '}')\n",
+    "for gate, name in zip(reversed(result['gate']),reversed(result['name'])):\n"
+    + "\totimes=' \\\\otimes '\n"
+    + "\tprint('\\stackrel{' + otimes.join(name[1]) +'}' + f'{{{gate}}}')\n",
 ]
 
 MATRIX_TO_QC_EXPECTED = [
