@@ -1,6 +1,6 @@
 qiskit==0.44.1
 PySide6==6.5.1.1
 qasync==0.24.0
-qiskit-classroom-converter==0.3.0
+qiskit-classroom-converter==0.4.0
 matplotlib==3.7.2
 pylatexenc==2.10
