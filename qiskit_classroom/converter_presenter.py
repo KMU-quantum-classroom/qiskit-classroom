@@ -136,8 +136,9 @@ class ConverterPresenter:
             result = await self.model.convert_and_draw(
                 shows_result=self.view.get_shows_result()
             )
-        except RuntimeError:
+        except RuntimeError as exc:
             self.view.show_alert_message("conversion processe error")
+            print(exc)
         except TimeoutExpired:
             self.view.show_alert_message("conversion process timeout error")
         except FileNotFoundError:
