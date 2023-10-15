@@ -137,8 +137,7 @@ class ConverterPresenter:
                 shows_result=self.view.get_shows_result()
             )
         except RuntimeError as exc:
-            self.view.show_alert_message("conversion processe error")
-            print(exc)
+            self.view.show_alert_message("conversion processe error\n" + exc.__str__())
         except TimeoutExpired:
             self.view.show_alert_message("conversion process timeout error")
         except FileNotFoundError:
