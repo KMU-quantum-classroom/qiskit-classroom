@@ -54,6 +54,7 @@ def add_new_line(strings: list[str]) -> str:
 class ConverterWorker:
     """worker for convert expression and visualize expression"""
 
+    # pylint: disable=too-many-arguments
     def __init__(
         self,
         from_expression: QuantumExpression,
@@ -79,7 +80,11 @@ class ConverterWorker:
         Returns:
             str: generated file name
         """
-        return "".join(random.choice(string.ascii_letters) for _ in range(10)) + ".py"
+        return (
+            "/tmp/"
+            + "".join(random.choice(string.ascii_letters) for _ in range(10))
+            + ".py"
+        )
 
     @staticmethod
     def write_converting_code(file_path: str, code: str) -> bool:  # pragma: no cover
@@ -170,9 +175,13 @@ class ConverterWorker:
             if self.to_expression is QuantumExpression.MATRIX:
                 return add_new_line(
                     [
-                        "for gate, name in zip(reversed(result['gate']), reversed(result['name'])):",
-                        """\tprint(f'{gate.strip()}_' + '{' + "\\\\otimes ".join(name[1]) + '}')""",
-                        "print(f\"={result['result']}_{{result}}\")"
+                        (
+                            "for gate, name in zip(reversed(result['gate']),"
+                            + "reversed(result['name'])):"
+                        ),
+                        "\totimes=' \\\\otimes '",
+                        """\tprint('\\stackrel{' + otimes.join(name[1]) +'}' + f'{{{gate}}}')""",
+                        "print(f\"= \\stackrel{{result}}{{{result['result']}}}\")"
                         if self.shows_result
                         else "",
                     ]
