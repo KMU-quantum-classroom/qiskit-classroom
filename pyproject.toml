@@ -12,7 +12,7 @@ exclude = ['qiskit_class*tests']
 
 [project]
 name = "qiskit-classroom"
-version = "0.2.1"
+version = "0.3.0"
 authors = [{ name = "KMU-quantum-classroom" }]
 description = "the Qiskit classroom GUI applications."
 readme = "README.md"
